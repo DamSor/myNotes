@@ -1,0 +1,29 @@
+{
+  // Mapped from Claude Code permissions:
+  //   allow  → terminalAllowlist (run without approval)
+  //   ask    → omitted from allowlist (approval prompt / Auto-review classifier)
+  //   deny   → autoRun.block_instructions (steer classifier toward blocking)
+  // Read / Edit / Write have no Cursor equivalent — file edits are not gated by this file.
+  // Requires Run Mode: Auto-review, Allowlist, or Run Everything (Cursor Settings → Agents).
+
+  "terminalAllowlist": [
+    "npm",
+    "npx",
+    "node",
+    "git add",
+    "git commit",
+    "git diff",
+    "git log",
+    "git status",
+    "git branch",
+    "git checkout",
+    "git stash"
+  ],
+
+  "autoRun": {
+    // Claude Code "deny" — steering only, not a hard security boundary.
+    "block_instructions": [
+      "Destructive recursive delete commands such as rm -rf against any path."
+    ]
+  }
+}
