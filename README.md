@@ -173,3 +173,6 @@ GitHub Actions runs lint + build on every push and PR to `master`. Configure `SU
 ## License
 
 MIT
+
+<!-- workers-builds smoke test: 2026-08-11 -->
+
