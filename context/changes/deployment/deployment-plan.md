@@ -14,7 +14,7 @@ deploy_paths:
   ongoing: Cloudflare Workers Builds (Git-connected, push to master)
 external_ci: none (GitHub Actions retained for lint + build quality gate only)
 status: in-progress
-current_phase: phase-5
+current_phase: phase-6
 revisions:
   - 2026-08-09 — initial plan (phases 0-8)
   - 2026-08-09 — added Prerequisites section (P.1 toolchain, P.2 Cloudflare, P.3 Supabase); trimmed duplicated wrangler-login step from Phase 0
@@ -31,6 +31,9 @@ revisions:
   - 2026-08-11 — Phase 4 partial: first `wrangler deploy` succeeded — live at https://my-notes.damian-sordyl.workers.dev; KV namespace `my-notes-session` auto-provisioned for the adapter's SESSION binding; version ID `5e660c5d-eacf-48c4-a054-a91ab672a961` recorded for Phase 8 rollback; `wrangler tail` streams live requests cleanly; browser sign-in E2E on production URL still pending (also blocked on adding the workers.dev origin to Supabase Redirect URLs — P.3 line 99)
   - 2026-08-11 — Phase 4 closed: user confirmed email+password sign-in works E2E on production. Supabase URL Configuration (localhost:3000 default) was NOT a blocker for the current flow — redirect URLs are only consulted for OAuth/magic-link/reset flows, not password auth. Flagged as latent gap for future FR-001-003 work. current_phase → phase-5
   - 2026-08-11 — Supabase URL Configuration cleaned up (Site URL → production, Redirect URLs include both localhost:4321 and workers.dev); P.3 Google OAuth sub-bullet 4 marked done in-line (sub-bullets 1–3 still pending for FR-001-003)
+  - 2026-08-11 — Phase 5 closed: Cloudflare Workers Builds Git-connected via GitHub App (scoped to DamSor/myNotes only). Smoke PR #1 (branch `test/workers-builds-smoke`) drove verification: both pipelines green — GH Actions `ci` (46s) + `Workers Builds: my-notes`; Cloudflare bot posted preview URLs on the PR (commit `https://46297785-my-notes.damian-sordyl.workers.dev`, branch `https://test-workers-builds-smoke-my-notes.damian-sordyl.workers.dev`); preview + prod both return HTTP 200, middleware redirect on preview still routes `/dashboard` → `/auth/signin`; new Worker version `v5` recorded with `triggered_by=version_upload` (Workers Builds uses `wrangler versions upload` on non-prod branches; prod merges will use `wrangler deploy`). current_phase → phase-6.
+  - 2026-08-11 — Branch-name reality-check: this repo's production branch is `main`, not `master`. Plan text still references `master` in several places (constraint 2, Phase 5, Phase 6/7/8) — treat those as `main` in practice. Also updated `.github/workflows/ci.yml` `push`/`pull_request` triggers from `master` → `main` so the existing lint+build gate actually runs on the real default branch (verified by the smoke PR firing ci at run 31463239149).
+  - 2026-08-11 — Phase 5 fully verified end-to-end: PR #1 squash-merged as commit `6125ab9` on `main`; Workers Builds ran a production deploy (version `v6`, active deployment `2740e603…`, ~60s from merge to live). Production URL `https://my-notes.damian-sordyl.workers.dev/` returns HTTP 200 with unchanged middleware behaviour (`/dashboard` → 302 → `/auth/signin`). Auto-deploy loop confirmed. Phase 5 DoD fully met.
 ---
 
 ## Cloudflare Workers deployment plan for MyNotes
@@ -277,21 +280,26 @@ The existing `.github/workflows/ci.yml` **remains as-is** — it keeps its lint 
 
 #### Setup steps
 
-- [ ] (human) Cloudflare dash → Workers & Pages → open the `my-notes` Worker (created in Phase 4) → **Settings** → **Builds** → **Connect** → authorize the Cloudflare GitHub App on this repository only (not org-wide). Reference: [Workers Builds docs](https://developers.cloudflare.com/workers/ci-cd/builds/).
-- [ ] (human) In the Builds settings, configure:
+- [x] (human) Cloudflare dash → Workers & Pages → open the `my-notes` Worker (created in Phase 4) → **Settings** → **Builds** → **Connect** → authorize the Cloudflare GitHub App on this repository only (not org-wide). Reference: [Workers Builds docs](https://developers.cloudflare.com/workers/ci-cd/builds/). _Done 2026-08-11: GitHub App installed scoped to `DamSor/myNotes` only._
+- [x] (human) In the Builds settings, configure:
   - **Repository**: this repo
-  - **Production branch**: `master`
+  - **Production branch**: `main` (plan predates repo rename from `master`; treat all "master" references in this file as `main` — see revision log)
   - **Build command**: `npm run build`
   - **Deploy command**: `npx wrangler deploy` (Cloudflare's default; make it explicit to avoid drift)
   - **Root directory**: `/` (repo root)
   - **Build environment → Node version**: `22` (matches `.nvmrc`). Do NOT rely on Cloudflare's default — it may lag behind Node 22 which Astro 6 requires.
-  - **Build variables**: add `SUPABASE_URL` and `SUPABASE_KEY` **only if** Phase 3 flipped `optional: false` (astro:env `access: "secret"` values are runtime-only, so the build normally does not need them). Do NOT put runtime secrets in Build variables — those are for `wrangler secret put`.
-- [ ] (human) In Builds → **Deploy triggers**, confirm: pushes to `master` → production deploy; pushes to non-`master` branches → preview deploy (ephemeral `<branch>-<script>.workers.dev` URL). Keep both enabled.
-- [ ] (agent) Push a trivial commit to a scratch branch (not `master`), open the PR, confirm:
-  1. GitHub Actions' existing `ci` job runs and passes (lint + build).
-  2. Cloudflare Workers Builds runs on the same commit and produces a preview URL.
-  3. The Cloudflare GitHub App comments the preview URL on the PR.
-- [ ] (agent) Merge the PR to `master`, confirm Workers Builds runs a *production* build+deploy and the workers.dev URL reflects the merged commit within ~1-2 minutes of the merge.
+  - **Build variables**: add `SUPABASE_URL` and `SUPABASE_KEY` **only if** Phase 3 flipped `optional: false` (astro:env `access: "secret"` values are runtime-only, so the build normally does not need them). Do NOT put runtime secrets in Build variables — those are for `wrangler secret put`. _Decision 2026-08-11: not needed — `optional: true` kept in Phase 3, so build works without Supabase env at build time._
+- [x] (human) In Builds → **Deploy triggers**, confirm: pushes to `main` → production deploy; pushes to non-`main` branches → preview deploy (ephemeral `<branch>-<script>.workers.dev` URL). Keep both enabled. _Verified 2026-08-11: non-prod branch push produced preview URL as expected._
+- [x] (agent) Push a trivial commit to a scratch branch (not `main`), open the PR, confirm:
+  1. GitHub Actions' existing `ci` job runs and passes (lint + build). — pass (46s, run 31463239149)
+  2. Cloudflare Workers Builds runs on the same commit and produces a preview URL. — pass (build `2bc0a150-10fb-4103-80fc-f7503065182f`, Worker version `v5`)
+  3. The Cloudflare GitHub App comments the preview URL on the PR. — pass (comment on PR #1)
+
+  Preview URLs verified live:
+  - Commit-specific: `https://46297785-my-notes.damian-sordyl.workers.dev` → HTTP 200
+  - Branch-specific: `https://test-workers-builds-smoke-my-notes.damian-sordyl.workers.dev` → HTTP 200
+  - Middleware smoke: `/dashboard` → 302 → `/auth/signin` (auth gate works on previews too)
+- [x] (agent) Merge the PR to `main`, confirm Workers Builds runs a *production* build+deploy and the workers.dev URL reflects the merged commit within ~1-2 minutes of the merge. _Done 2026-08-11: PR #1 squash-merged as commit `6125ab9`. Workers Builds produced Worker version `v6` at 06:06:55Z and activated it as the production deployment (`2740e603…`) at 06:06:56Z (~60s end-to-end). Production URL returns HTTP 200; `/dashboard` still 302s to `/auth/signin`. Auto-deploy on `main` is verified working._
 
 #### Free-tier build budget
 
