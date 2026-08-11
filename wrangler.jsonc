@@ -1,6 +1,17 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "10x-astro-starter",
+  // ============================================================================
+  // FREE-PLAN TRIPWIRES — upgrade to Workers Paid ($5/mo) if ANY of these fire:
+  //   1. Any single request exceeds 10 ms CPU (JSON parse of LLM response,
+  //      tokenizer, base64/crypto in hot path). Measure with Date.now() deltas.
+  //   2. Weekly cron ("0 3 * * 1", Phase 6) fails with "Script exceeded CPU
+  //      time limit" in `wrangler tail` / observability MCP.
+  //   3. Free-tier log retention (3d vs 7d Paid) hides a Monday incident by
+  //      Wednesday — mitigated by `ai_run_failures` Supabase table (Phase 6).
+  //   4. Daily requests exceed Free cap of 100 000/day.
+  // Source: context/changes/deployment/deployment-plan.md § Phase 0
+  // ============================================================================
+  "name": "my-notes",
   "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2026-05-08",
   "compatibility_flags": ["nodejs_compat"],
