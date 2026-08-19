@@ -1,7 +1,7 @@
 ---
 change_id: notes-schema-and-rls
 title: Notes/tags/note_tags schema with per-operation RLS
-status: implementing
+status: implemented
 created: 2026-08-19
 updated: 2026-08-19
 archived_at: null

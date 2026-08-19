@@ -213,9 +213,9 @@ No existing data to migrate — first migration on an empty schema. Rollback for
 
 #### Automated
 
-- [x] 2.1 Type checking / build passes: `npm run build`
-- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Type checking / build passes: `npm run build` — 2eb07bd
+- [x] 2.2 Lint passes: `npm run lint` — 2eb07bd
 
 #### Manual
 
-- [x] 2.3 Entity type fields match migration columns one-to-one
+- [x] 2.3 Entity type fields match migration columns one-to-one — 2eb07bd
