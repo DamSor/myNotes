@@ -78,12 +78,12 @@ Resolve the input path:
 - If an argument was passed, use it verbatim (strip a leading `@` if present).
 - Otherwise default to `context/foundation/prd.md`.
 
-Execute a shell command to check if the file exists:
+Execute a bash command to check if the file exists:
 ```bash
 test -f "<resolved-path>"
 ```
 
-If the file exists, **read its content FULLY**.
+If the file exists, **read it FULLY** (no `limit`/`offset`).
 
 If it does not exist, Ask the user:
 - question: "No PRD found at `<resolved-path>`. How would you like to proceed?"
@@ -263,7 +263,7 @@ Rules for the options block:
 
 **5d. Derive investment areas (no question).**
 
-After the 2-3 anchor answers land, derive investment areas from: (1) the chosen `main_goal`, (2) PRD NFRs that gate launch in a layer, (3) baseline gaps mapped to must-have FRs, (4) Open-Question concentration. Announce the derived investment in the synthesis recap (5e). The user can override in one line; they are not asked to pick.
+After the 2-3 anchor answers land, derive investment areas from: (1) the chosen `main_goal`, (2) PRD NFRs gating launch in a layer, (3) baseline gaps mapped to must-have FRs, (4) Open-Question concentration. Announce the derived investment in the synthesis recap (5e). The user can override in one line; they are not asked to pick.
 
 **5e. Synthesis recap — confirm without asking.**
 
@@ -605,12 +605,12 @@ Then STOP.
 
 ### Step 9: Collision check
 
-Execute a shell command to check if the file exists:
+Execute a bash command to check if the file exists:
 ```bash
 test -f context/foundation/roadmap.md
 ```
 
-If the file does not exist, write the content to `context/foundation/roadmap.md` and proceed to Step 10.
+If the file does not exist, write to `context/foundation/roadmap.md` and proceed to Step 10.
 
 If the file exists, the foundation-doc convention is **edit-in-place** for incremental refinement, **archive-then-replace** for full regeneration. This skill produces a *full* roadmap from PRD; surgical refinement is out of scope. So default to archive-then-replace, but Ask the user:
 - question: "context/foundation/roadmap.md already exists. How would you like to proceed?"
@@ -709,7 +709,7 @@ STOP. Do not chain into another skill automatically — the user picks when to p
 
 4. **Foundations are minimal unlocks, not layer-completion projects.** A foundation may create the smallest prerequisite needed before vertical work can proceed. It may not prebuild the whole database/API/UI/auth layer. If a technical element can be introduced inside the first user-facing slice that needs it, put it there; this keeps integration vertical and progressively reveals only the needed elements.
 
-5. **No estimates, no time units.** No "Day 1", no "2 weeks", no "small/medium/large", no points. AI-agent execution is non-linear and time-budgeted estimates lie. Order is encoded in Prerequisites; pacing surfaces via Blockers and Unknowns. The roadmap describes shape, not schedule.
+5. **No estimates, no time units.** No "Day 1", no "2 weeks", no "small/medium/large", no points. The AI assistant execution is non-linear and time-budgeted estimates lie. Order is encoded in Prerequisites; pacing surfaces via Blockers and Unknowns. The roadmap describes shape, not schedule.
 
 6. **No low-level technical details.** No frameworks named (those live in `tech-stack.md`), no file paths, no schema definitions, no code, no library choices. If you find yourself writing those, you've crossed into `/10x-plan`'s territory — stop and let `/10x-plan` do its job downstream.
 
