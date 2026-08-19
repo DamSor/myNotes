@@ -194,28 +194,28 @@ No existing data to migrate — first migration on an empty schema. Rollback for
 
 #### Automated
 
-- [x] 1.1 Local DB applies migration cleanly: `npx supabase db reset`
-- [x] 1.2 Migration filename matches `YYYYMMDDHHmmss_*.sql` convention
-- [x] 1.3 RLS enabled on all three tables (`relrowsecurity` = true)
-- [x] 1.4 Exactly 12 policies exist across the three tables (`pg_policies`)
-- [x] 1.5 Lint passes: `npm run lint`
-- [x] 1.6 Build passes: `npm run build`
+- [x] 1.1 Local DB applies migration cleanly: `npx supabase db reset` — 0b5a460
+- [x] 1.2 Migration filename matches `YYYYMMDDHHmmss_*.sql` convention — 0b5a460
+- [x] 1.3 RLS enabled on all three tables (`relrowsecurity` = true) — 0b5a460
+- [x] 1.4 Exactly 12 policies exist across the three tables (`pg_policies`) — 0b5a460
+- [x] 1.5 Lint passes: `npm run lint` — 0b5a460
+- [x] 1.6 Build passes: `npm run build` — 0b5a460
 
 #### Manual
 
-- [x] 1.7 Two-user RLS isolation: A cannot select/update/delete B's rows
-- [x] 1.8 Insert of `note_tags` with foreign `user_id` is rejected
-- [x] 1.9 Case-insensitive tag uniqueness violation ("Ideas"/"ideas")
-- [x] 1.10 Cascade deletes remove `note_tags` on note/tag delete
-- [x] 1.11 `npx supabase db push` applies to cloud without error
+- [x] 1.7 Two-user RLS isolation: A cannot select/update/delete B's rows — 0b5a460
+- [x] 1.8 Insert of `note_tags` with foreign `user_id` is rejected — 0b5a460
+- [x] 1.9 Case-insensitive tag uniqueness violation ("Ideas"/"ideas") — 0b5a460
+- [x] 1.10 Cascade deletes remove `note_tags` on note/tag delete — 0b5a460
+- [x] 1.11 `npx supabase db push` applies to cloud without error — 0b5a460
 
 ### Phase 2: Shared TypeScript Types
 
 #### Automated
 
-- [ ] 2.1 Type checking / build passes: `npm run build`
-- [ ] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Type checking / build passes: `npm run build`
+- [x] 2.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.3 Entity type fields match migration columns one-to-one
+- [x] 2.3 Entity type fields match migration columns one-to-one
