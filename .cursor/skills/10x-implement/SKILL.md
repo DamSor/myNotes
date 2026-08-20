@@ -80,7 +80,7 @@ The phase-end commit ritual (see "Verification Approach" below) stages files fro
 
 **Discipline**:
 
-- Every time you modify a file using your AI coding assistant during the current phase, add its repo-relative path to the touched-file set.
+- Every time you modify a file during the current phase, add its repo-relative path to the touched-file set.
 - The set always contains `context/changes/<change-id>/plan.md` because each phase produces at least one modification to its `## Progress` section. Add it on entry to a phase even before any checkboxes flip.
 - **Phase 1 bootstrap**: on the first phase of a change, also seed the touched-file set with all untracked or modified files inside `context/changes/<change-id>/` — typically `change.md`, `research.md`, `plan.md`, and any other context files created during planning. These files are part of the change and should land in the first commit rather than being left as untracked stragglers.
 - The set **resets at each phase boundary**. After the phase-end commit completes, clear it before starting the next phase.
@@ -122,7 +122,7 @@ After implementing a phase:
 - Run the success criteria checks (usually `make check test` covers everything)
 - Fix any issues before proceeding
 - Update your progress in your todos and in the plan's `## Progress` section
-- **Mutate ONLY the `## Progress` section.** Phase blocks (Overview, Changes Required, Success Criteria) are read-only. Use your AI coding assistant to modify the plan to flip `- [ ] N.M <title>` → `- [x] N.M <title>` in Progress as each step completes. Do NOT edit Phase block bullets, do NOT add HTML comment progress markers at the bottom of the plan, and do NOT write any state-file sidecar.
+- **Mutate ONLY the `## Progress` section.** Phase blocks (Overview, Changes Required, Success Criteria) are read-only. Use the appropriate tool to flip `- [ ] N.M <title>` → `- [x] N.M <title>` in Progress as each step completes. Do NOT edit Phase block bullets, do NOT add HTML comment progress markers at the bottom of the plan, and do NOT write any state-file sidecar.
 - **Run the phase-end commit ritual**: After all automated checks pass for the phase, walk through this sequenced ritual to author one Conventional-Commits commit and write the closing short SHA back into every Progress row flipped during the phase.
 
   1. **Manual confirmation gate.** Inform the human that automated verification passed and list the manual verification items from the plan. Pause here. Do not proceed until the human confirms manual testing succeeded. Use this format:
@@ -157,7 +157,7 @@ After implementing a phase:
 
      If the dirty-but-untouched set is empty, skip this step.
 
-  4. **Stage explicitly by path.** Execute `git add` for each file in the chosen set by name. Do NOT use `git add -A` or `git add .` — explicit paths only.
+  4. **Stage explicitly by path.** Use `git add` for each file in the chosen set by name. Do NOT use `git add -A` or `git add .` — explicit paths only.
 
   5. **Check empty diff.** Run `git diff --cached --quiet`. Exit code 0 means no staged diff. If empty, print:
 
@@ -172,7 +172,7 @@ After implementing a phase:
      - "Edit subject line" (description: "Override the subject; keep the body.")
      - "Override entirely" (description: "Replace both subject and body.")
 
-  7. **Commit via heredoc.** Execute `git commit` per the global commit-message protocol:
+  7. **Commit via heredoc.** Run `git commit` per the global commit-message protocol:
 
      ```bash
      git commit -m "$(cat <<'EOF'
@@ -186,9 +186,9 @@ After implementing a phase:
 
      Never pass `--no-verify`, `--amend`, or signing-bypass flags. If a pre-commit hook fails, fix the underlying issue and create a NEW commit — the original commit did NOT happen, so amending would touch the previous phase's commit instead.
 
-  8. **Capture the short SHA.** Execute `git rev-parse --short HEAD` and store as `SHA`. Skip this step if `SHA=""` was set by step 5.
+  8. **Capture the short SHA.** Run `git rev-parse --short HEAD` and store as `SHA`. Skip this step if `SHA=""` was set by step 5.
 
-  9. **Write the SHA back into Progress.** For every Progress row flipped during this phase, perform a targeted modification:
+  9. **Write the SHA back into Progress.** For every Progress row flipped during this phase, run a targeted modification:
 
      - Find: `- [x] N.M <title>` (no existing ` — <sha>` suffix at end of line)
      - Replace with: `- [x] N.M <title> — <SHA>`
@@ -235,7 +235,7 @@ do not check off items in the manual testing steps until confirmed by the user.
 
 ### After each step
 
-Use your AI coding assistant to modify exactly one Progress line at a time:
+Use the appropriate tool to flip exactly one Progress line at a time:
 
 - Find: `- [ ] N.M <title>`
 - Replace with: `- [x] N.M <title>`

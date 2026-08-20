@@ -54,11 +54,7 @@ The result is `<change-id>`.
 
 Two pre-flight checks. Either failing blocks the archive.
 
-**1. Uncommitted edits inside the change folder.** Run a shell command to get the git status:
-
-```bash
-git status --porcelain "context/changes/<change-id>/"
-```
+**1. Uncommitted edits inside the change folder.** Run a shell command to check `git status --porcelain "context/changes/<change-id>/"`.
 
 If the output is non-empty, **block** and print:
 
@@ -70,11 +66,7 @@ If the output is non-empty, **block** and print:
 Commit or stash them first, then re-run /10x-archive.
 ```
 
-**2. Pre-existing staged changes anywhere.** The archive commit step (see "Move and stamp" below) bundles whatever is staged at commit time. If the user has unrelated staged changes from earlier work, they'd silently land in the `chore(archive): close ...` commit. Run a shell command to check for staged changes:
-
-```bash
-git diff --cached --quiet
-```
+**2. Pre-existing staged changes anywhere.** The archive commit step (see "Move and stamp" below) bundles whatever is staged at commit time. If the user has unrelated staged changes from earlier work, they'd silently land in the `chore(archive): close ...` commit. Run a shell command to check `git diff --cached --quiet`.
 
 If the exit code is non-zero, **block** and print:
 
@@ -113,13 +105,19 @@ If at least one warning was queued, print:
   - <warning 3>
 ```
 
-Then ask the user: **Manual-only nudge**: if the Pending Progress check above queued a warning whose breakdown was exactly `0 automated, <Y> manual` with `<Y> ≥ 1`, append ` (Recommended)` to the `Continue archiving` label so the prompt visibly nudges toward archive — manual checks are often deferred-by-design, and archiving is the expected path. In all other cases (mixed pending, automated-only, legacy-fallback warning, or no Progress warning), present the labels verbatim.
+Then ask the user:
+- question: `Archive "<change-id>" anyway?`
+  header: `Archive`
+  options:
+  - label: `Continue archiving`
+    description: `Move the folder to context/archive/ despite the warnings.`
+  - label: `Resume implementation`
+    description: `Don't archive. Suggest /10x-implement <change-id> next.`
+  - label: `Cancel`
+    description: `Don't archive. Exit cleanly without further action.`
+  multiSelect: false
 
-- Ask the user: `Archive "<change-id>" anyway?`
-  - Options:
-    - `Continue archiving`: `Move the folder to context/archive/ despite the warnings.`
-    - `Resume implementation`: `Don't archive. Suggest /10x-implement <change-id> next.`
-    - `Cancel`: `Don't archive. Exit cleanly without further action.`
+**Manual-only nudge**: if the Pending Progress check above queued a warning whose breakdown was exactly `0 automated, <Y> manual` with `<Y> ≥ 1`, append ` (Recommended)` to the `Continue archiving` label so the prompt visibly nudges toward archive — manual checks are often deferred-by-design, and archiving is the expected path. In all other cases (mixed pending, automated-only, legacy-fallback warning, or no Progress warning), present the labels verbatim.
 
 - **Continue archiving** → proceed to "Move and stamp" below.
 - **Resume implementation** → print `→ /10x-implement <change-id>` and copy that to clipboard via `pbcopy 2>/dev/null || clip.exe 2>/dev/null || xclip -selection clipboard 2>/dev/null || true` (or `Set-Clipboard` on PowerShell) (best effort, cross-platform). STOP.
