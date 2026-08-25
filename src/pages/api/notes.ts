@@ -1,16 +1,10 @@
 import type { APIRoute } from "astro";
 import { createClient } from "@/lib/supabase";
+import { json } from "@/lib/http";
 import { createNoteSchema } from "@/lib/validation/notes";
 import { createNoteWithTags, listNotesWithTags } from "@/lib/services/notes";
 
 export const prerender = false;
-
-function json(body: unknown, status: number): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
-}
 
 // POST /api/notes — create a plain-text note with tags (names resolved server-side).
 // GET  /api/notes — list the caller's notes newest-first, each with its tags.
@@ -37,8 +31,14 @@ export const POST: APIRoute = async (context) => {
     return json({ error: "Validation failed", issues: parsed.error.issues }, 400);
   }
 
-  const result = await createNoteWithTags(supabase, user.id, parsed.data);
-  return json(result, 201);
+  try {
+    const result = await createNoteWithTags(supabase, user.id, parsed.data);
+    return json(result, 201);
+  } catch (e) {
+    // eslint-disable-next-line no-console -- intentional server-side error log
+    console.error("POST /api/notes failed", e);
+    return json({ error: "Failed to create note" }, 500);
+  }
 };
 
 export const GET: APIRoute = async (context) => {
@@ -52,6 +52,12 @@ export const GET: APIRoute = async (context) => {
     return json({ error: "Supabase is not configured" }, 500);
   }
 
-  const notes = await listNotesWithTags(supabase, user.id);
-  return json(notes, 200);
+  try {
+    const notes = await listNotesWithTags(supabase, user.id);
+    return json(notes, 200);
+  } catch (e) {
+    // eslint-disable-next-line no-console -- intentional server-side error log
+    console.error("GET /api/notes failed", e);
+    return json({ error: "Failed to list notes" }, 500);
+  }
 };

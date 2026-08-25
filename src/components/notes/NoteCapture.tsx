@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { CircleCheck, NotebookPen } from "lucide-react";
+import { NotebookPen } from "lucide-react";
 import { SubmitButton } from "@/components/auth/SubmitButton";
 import { ServerError } from "@/components/auth/ServerError";
+import { ServerNotice } from "@/components/auth/ServerNotice";
 import { TagInput } from "@/components/notes/TagInput";
 import { NoteItem } from "@/components/notes/NoteItem";
 import { useNotes } from "@/components/hooks/useNotes";
@@ -68,12 +69,7 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
         <TagInput available={tags} selected={tagNames} onChange={setTagNames} />
 
         <ServerError message={error} />
-        {warning && (
-          <p className="flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-900/30 px-3 py-2 text-sm text-amber-200">
-            <CircleCheck className="size-4 shrink-0" />
-            {warning}
-          </p>
-        )}
+        <ServerNotice message={warning} />
 
         <SubmitButton pendingText="Saving..." icon={<NotebookPen className="size-4" />} disabled={!canSubmit}>
           Save note

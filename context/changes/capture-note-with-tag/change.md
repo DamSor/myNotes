@@ -1,7 +1,7 @@
 ---
 change_id: capture-note-with-tag
 title: Utwórz notatkę plain-text z tagami (typeahead) i zobacz ją w płaskiej liście
-status: implemented
+status: impl_reviewed
 created: 2026-08-25
 updated: 2026-08-25
 archived_at: null

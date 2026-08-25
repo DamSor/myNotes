@@ -136,9 +136,11 @@ export async function createNoteWithTags(
 
     note.tags = tags;
     return { note, tagsAttached: true };
-  } catch {
+  } catch (e) {
     // Note-first ordering: the note is already saved. Surface the partial success rather
-    // than discarding the note (Guardrail #2).
+    // than discarding the note (Guardrail #2). Log so the degradation is diagnosable.
+    // eslint-disable-next-line no-console -- intentional server-side error log
+    console.error("createNoteWithTags: tag attach failed; note saved without tags", e);
     note.tags = [];
     return { note, tagsAttached: false };
   }
