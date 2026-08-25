@@ -3,7 +3,7 @@ project: MyNotes
 version: 1
 status: draft
 created: 2026-08-18
-updated: 2026-08-19
+updated: 2026-08-25
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -31,7 +31,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | ---- | ----------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- | --------------------------- | -------- |
 | F-01 | `notes-schema-and-rls`        | (foundation) schemat `notes` + `tags` + `note_tags` z RLS per-operacja wdrożony                       | —                      | Access Control, Guardrail#1 | done     |
 | F-02 | `llm-provider-contract`       | (foundation) integracja z OpenRouter + decyzja o training-opt-out zablokowana                         | —                      | Guardrail#3, OQ#3           | blocked  |
-| S-01 | `capture-note-with-tag`       | user tworzy notatkę plain-text z tagami (typeahead) i widzi ją w płaskiej liście                      | F-01                   | FR-004, FR-005, FR-009, FR-010 | proposed |
+| S-01 | `capture-note-with-tag`       | user tworzy notatkę plain-text z tagami (typeahead) i widzi ją w płaskiej liście                      | F-01                   | FR-004, FR-005, FR-009, FR-010 | in-progress |
 | S-02 | `first-ai-digest-on-click`    | user klika "Generuj digest" dla wybranego tagu i widzi digest AI w sekcji "AI dla mnie" (NORTH STAR)  | S-01, F-02             | FR-015, FR-016              | proposed |
 | S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | proposed |
 | S-04 | `single-tag-filter`           | user filtruje listę notatek po pojedynczej etykiecie                                                  | S-01                   | FR-011                      | proposed |
@@ -102,7 +102,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **Blockers:** —.
 - **Unknowns:** —.
 - **Risk:** Ten slice ustala shape'y API notatek i tagów (endpoint contracts, response shape, DTO w `src/types.ts`) — jeśli źle nazwane, S-02/S-03/S-04/S-05 dziedziczą kompromis. Trzymać jeden endpoint per zasób, DTO w `src/types.ts`, zod validation w POST/PATCH.
-- **Status:** proposed
+- **Status:** in-progress
 
 ### S-02: Pierwszy digest AI na klik (NORTH STAR)
 
