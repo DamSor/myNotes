@@ -1,0 +1,33 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import NoteCapture from "@/components/notes/NoteCapture";
+import { createClient } from "@/lib/supabase";
+import { listNotesWithTags, listTags } from "@/lib/services/notes";
+import type { NoteWithTags, Tag } from "@/types";
+
+// Route is gated by middleware (PROTECTED_ROUTES), so an unauthenticated user is redirected
+// before reaching here. We server-fetch the initial data and hand it to the island, which
+// owns all list markup — the page renders no note rows itself (F1).
+const { user } = Astro.locals;
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+
+let initialNotes: NoteWithTags[] = [];
+let initialTags: Tag[] = [];
+if (supabase && user) {
+  initialNotes = await listNotesWithTags(supabase, user.id);
+  initialTags = await listTags(supabase, user.id);
+}
+---
+
+<Layout title="Notes">
+  <div class="bg-cosmic min-h-screen p-4">
+    <div class="mx-auto w-full max-w-2xl py-8">
+      <h1
+        class="mb-6 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-center text-3xl font-bold text-transparent"
+      >
+        Your notes
+      </h1>
+      <NoteCapture initialNotes={initialNotes} initialTags={initialTags} client:load />
+    </div>
+  </div>
+</Layout>

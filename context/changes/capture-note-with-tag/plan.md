@@ -282,31 +282,31 @@ No schema migration — F-01 covers the tables. No data migration. Adding `zod` 
 
 #### Automated
 
-- [x] 2.1 Build passes: `npm run build`
-- [x] 2.2 Lint passes: `npm run lint`
-- [x] 2.3 Both routes export `const prerender = false`
+- [x] 2.1 Build passes: `npm run build` — a876835
+- [x] 2.2 Lint passes: `npm run lint` — a876835
+- [x] 2.3 Both routes export `const prerender = false` — a876835
 
 #### Manual
 
-- [x] 2.4 `POST /api/notes` with `{content, tagNames:["A","a"]}` returns 201 and creates one tag, linked
-- [x] 2.5 `POST /api/notes` with empty/whitespace content returns 400 and creates nothing
-- [x] 2.6 `GET /api/notes` returns caller's notes newest-first with tags; `GET /api/tags` returns caller's tags
-- [x] 2.7 Unauthenticated requests to both routes return 401
-- [x] 2.8 A second user's `GET /api/notes` never returns the first user's notes
+- [x] 2.4 `POST /api/notes` with `{content, tagNames:["A","a"]}` returns 201 and creates one tag, linked — a876835
+- [x] 2.5 `POST /api/notes` with empty/whitespace content returns 400 and creates nothing — a876835
+- [x] 2.6 `GET /api/notes` returns caller's notes newest-first with tags; `GET /api/tags` returns caller's tags — a876835
+- [x] 2.7 Unauthenticated requests to both routes return 401 — a876835
+- [x] 2.8 A second user's `GET /api/notes` never returns the first user's notes — a876835
 
 ### Phase 3: Notes UI
 
 #### Automated
 
-- [ ] 3.1 Build passes: `npm run build`
-- [ ] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Build passes: `npm run build`
+- [x] 3.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 `/notes` shows notes newest-first with creation date as the first line
-- [ ] 3.4 Tag input suggests the user's own tags; a new name creates a brand-new tag
-- [ ] 3.5 Creating a note with one new + one existing tag prepends it with both tags; input clears; feels instant
-- [ ] 3.6 Creating a note with no tags works
-- [ ] 3.7 Empty/whitespace content cannot be submitted
-- [ ] 3.8 Unauthenticated access to `/notes` redirects to `/auth/signin`
-- [ ] 3.9 A second user does not see the first user's notes or tag suggestions
+- [x] 3.3 `/notes` shows notes newest-first with creation date as the first line
+- [x] 3.4 Tag input suggests the user's own tags; a new name creates a brand-new tag
+- [x] 3.5 Creating a note with one new + one existing tag prepends it with both tags; input clears; feels instant
+- [x] 3.6 Creating a note with no tags works
+- [x] 3.7 Empty/whitespace content cannot be submitted
+- [x] 3.8 Unauthenticated access to `/notes` redirects to `/auth/signin`
+- [x] 3.9 A second user does not see the first user's notes or tag suggestions
