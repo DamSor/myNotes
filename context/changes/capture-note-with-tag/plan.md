@@ -269,30 +269,30 @@ No schema migration — F-01 covers the tables. No data migration. Adding `zod` 
 
 #### Automated
 
-- [x] 1.1 Type checking / build passes: `npm run build`
-- [x] 1.2 Lint passes: `npm run lint`
-- [x] 1.3 `zod` resolves as a dependency (present in `package.json` + lockfile)
+- [x] 1.1 Type checking / build passes: `npm run build` — df34a33
+- [x] 1.2 Lint passes: `npm run lint` — df34a33
+- [x] 1.3 `zod` resolves as a dependency (present in `package.json` + lockfile) — df34a33
 
 #### Manual
 
-- [x] 1.4 Service function signatures match the DTOs in `src/types.ts`
-- [x] 1.5 Service enforces note-first ordering and case-insensitive, set-deduped tag resolution
+- [x] 1.4 Service function signatures match the DTOs in `src/types.ts` — df34a33
+- [x] 1.5 Service enforces note-first ordering and case-insensitive, set-deduped tag resolution — df34a33
 
 ### Phase 2: API Routes
 
 #### Automated
 
-- [ ] 2.1 Build passes: `npm run build`
-- [ ] 2.2 Lint passes: `npm run lint`
-- [ ] 2.3 Both routes export `const prerender = false`
+- [x] 2.1 Build passes: `npm run build`
+- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.3 Both routes export `const prerender = false`
 
 #### Manual
 
-- [ ] 2.4 `POST /api/notes` with `{content, tagNames:["A","a"]}` returns 201 and creates one tag, linked
-- [ ] 2.5 `POST /api/notes` with empty/whitespace content returns 400 and creates nothing
-- [ ] 2.6 `GET /api/notes` returns caller's notes newest-first with tags; `GET /api/tags` returns caller's tags
-- [ ] 2.7 Unauthenticated requests to both routes return 401
-- [ ] 2.8 A second user's `GET /api/notes` never returns the first user's notes
+- [x] 2.4 `POST /api/notes` with `{content, tagNames:["A","a"]}` returns 201 and creates one tag, linked
+- [x] 2.5 `POST /api/notes` with empty/whitespace content returns 400 and creates nothing
+- [x] 2.6 `GET /api/notes` returns caller's notes newest-first with tags; `GET /api/tags` returns caller's tags
+- [x] 2.7 Unauthenticated requests to both routes return 401
+- [x] 2.8 A second user's `GET /api/notes` never returns the first user's notes
 
 ### Phase 3: Notes UI
 
