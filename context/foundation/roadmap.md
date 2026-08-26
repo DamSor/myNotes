@@ -3,7 +3,7 @@ project: MyNotes
 version: 1
 status: draft
 created: 2026-08-18
-updated: 2026-08-25
+updated: 2026-08-26
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -33,7 +33,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | F-02 | `llm-provider-contract`       | (foundation) integracja z OpenRouter + decyzja o training-opt-out zablokowana                         | —                      | Guardrail#3, OQ#3           | blocked  |
 | S-01 | `capture-note-with-tag`       | user tworzy notatkę plain-text z tagami (typeahead) i widzi ją w płaskiej liście                      | F-01                   | FR-004, FR-005, FR-009, FR-010 | done |
 | S-02 | `first-ai-digest-on-click`    | user klika "Generuj digest" dla wybranego tagu i widzi digest AI w sekcji "AI dla mnie" (NORTH STAR)  | S-01, F-02             | FR-015, FR-016              | proposed |
-| S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | proposed |
+| S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | in-progress |
 | S-04 | `single-tag-filter`           | user filtruje listę notatek po pojedynczej etykiecie                                                  | S-01                   | FR-011                      | proposed |
 | S-05 | `text-search`                 | user wyszukuje notatki po fragmencie tekstu (case-insensitive, substring)                             | S-01                   | FR-020                      | proposed |
 | S-06 | `edit-or-delete-digest`       | user edytuje digest inline lub usuwa go w sekcji "AI dla mnie" (sygnały 70% akceptacji)               | S-02                   | FR-017                      | proposed |
@@ -128,7 +128,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **Blockers:** —.
 - **Unknowns:** —.
 - **Risk:** Inline-edit + delete-dialog dotykają tego samego wiersza listy — konflikt UX (klik = edit vs. klik = delete) jest realny; wymaga jasnego rozdzielenia hitboxów i keyboard shortcuts. Twardy delete zaakceptowany świadomie (brak kosza) — dialog potwierdzenia jest minimalnym zabezpieczeniem.
-- **Status:** proposed
+- **Status:** in-progress
 
 ### S-04: Filtruj notatki po pojedynczym tagu
 
