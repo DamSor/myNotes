@@ -265,30 +265,30 @@ No schema migration — F-01 already provides UPDATE/DELETE RLS policies, `on de
 
 #### Automated
 
-- [x] 1.1 Type checking / build passes: `npm run build`
-- [x] 1.2 Lint passes: `npm run lint`
+- [x] 1.1 Type checking / build passes: `npm run build` — 992c1f0
+- [x] 1.2 Lint passes: `npm run lint` — 992c1f0
 
 #### Manual
 
-- [x] 1.3 Service signatures compile against refined `UpdateNoteDTO`/`UpdateNoteResponse`
-- [x] 1.4 Service confirms content-first ordering, tag-link diffing, `findOrCreateTags` reuse, no manual `updated_at`, `null`/`false` on non-owned ids
+- [x] 1.3 Service signatures compile against refined `UpdateNoteDTO`/`UpdateNoteResponse` — 992c1f0
+- [x] 1.4 Service confirms content-first ordering, tag-link diffing, `findOrCreateTags` reuse, no manual `updated_at`, `null`/`false` on non-owned ids — 992c1f0
 
 ### Phase 2: API Routes
 
 #### Automated
 
-- [ ] 2.1 Build passes: `npm run build`
-- [ ] 2.2 Lint passes: `npm run lint`
-- [ ] 2.3 Route exports `const prerender = false`
+- [x] 2.1 Build passes: `npm run build`
+- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.3 Route exports `const prerender = false`
 
 #### Manual
 
-- [ ] 2.4 `PATCH` content-only returns 200 with updated content, unchanged tags, advanced `updated_at`
-- [ ] 2.5 `PATCH` tags re-syncs (case-insensitive collapse, create-new, `[]` clears all)
-- [ ] 2.6 `PATCH` empty/whitespace content returns 400 and changes nothing
-- [ ] 2.7 `PATCH`/`DELETE` on another user's note id returns 404, no leak
-- [ ] 2.8 `DELETE` returns 200 `{ id }`; note gone from `GET /api/notes`; `note_tags` links cascaded
-- [ ] 2.9 Unauthenticated `PATCH`/`DELETE` returns 401
+- [x] 2.4 `PATCH` content-only returns 200 with updated content, unchanged tags, advanced `updated_at`
+- [x] 2.5 `PATCH` tags re-syncs (case-insensitive collapse, create-new, `[]` clears all)
+- [x] 2.6 `PATCH` empty/whitespace content returns 400 and changes nothing
+- [x] 2.7 `PATCH`/`DELETE` on another user's note id returns 404, no leak
+- [x] 2.8 `DELETE` returns 200 `{ id }`; note gone from `GET /api/notes`; `note_tags` links cascaded
+- [x] 2.9 Unauthenticated `PATCH`/`DELETE` returns 401
 
 ### Phase 3: Inline Edit + Delete UI
 
