@@ -294,16 +294,16 @@ No schema migration — F-01 already provides UPDATE/DELETE RLS policies, `on de
 
 #### Automated
 
-- [x] 3.1 Build passes: `npm run build`
-- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Build passes: `npm run build` — 7b25f93
+- [x] 3.2 Lint passes: `npm run lint` — 7b25f93
 
 #### Manual
 
-- [x] 3.3 Each row shows Edit + Delete controls; list unchanged at rest
-- [x] 3.4 Edit opens an inline form seeded with content + tag chips; Save disabled when content blank
-- [x] 3.5 Content-only edit replaces the row in place; date unchanged, order preserved
-- [x] 3.6 Tag edit (add existing, add new, remove) reflects on the row; new tag appears in later typeahead
-- [x] 3.7 Cancel discards changes and returns to read mode
-- [x] 3.8 Delete opens confirm dialog; confirm removes row (stays gone after reload); dismiss keeps note
-- [x] 3.9 Partial tag-attach failure surfaces a non-fatal notice while content edit persists (code-path verified)
-- [x] 3.10 Signed-out `/notes` redirects; second user cannot edit/delete first user's notes (404)
+- [x] 3.3 Each row shows Edit + Delete controls; list unchanged at rest — 7b25f93
+- [x] 3.4 Edit opens an inline form seeded with content + tag chips; Save disabled when content blank — 7b25f93
+- [x] 3.5 Content-only edit replaces the row in place; date unchanged, order preserved — 7b25f93
+- [x] 3.6 Tag edit (add existing, add new, remove) reflects on the row; new tag appears in later typeahead — 7b25f93
+- [x] 3.7 Cancel discards changes and returns to read mode — 7b25f93
+- [x] 3.8 Delete opens confirm dialog; confirm removes row (stays gone after reload); dismiss keeps note — 7b25f93
+- [x] 3.9 Partial tag-attach failure surfaces a non-fatal notice while content edit persists (code-path verified) — 7b25f93
+- [x] 3.10 Signed-out `/notes` redirects; second user cannot edit/delete first user's notes (404) — 7b25f93
