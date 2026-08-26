@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CreateNoteDTO, CreateNoteResponse, NoteWithTags, Tag } from "@/types";
+import type { CreateNoteDTO, CreateNoteResponse, NoteWithTags, Tag, UpdateNoteDTO, UpdateNoteResponse } from "@/types";
 
 // Data-layer service for notes + tags. API routes stay thin and delegate here so every
 // downstream slice (S-02..S-05) reuses the same reads/writes. All functions take an
@@ -21,12 +21,14 @@ function flattenNoteRow(row: NoteTagJoinRow): NoteWithTags {
   return { ...note, tags };
 }
 
+const NOTE_WITH_TAGS_SELECT = "id, user_id, content, created_at, updated_at, note_tags(tags(*))";
+
 // Newest-first flat list of the user's notes with their attached tags (FR-005/010).
 // Relies on the notes(user_id, created_at desc) index; tags are joined via note_tags.
 export async function listNotesWithTags(supabase: SupabaseClient, userId: string): Promise<NoteWithTags[]> {
   const { data, error } = await supabase
     .from("notes")
-    .select("id, user_id, content, created_at, updated_at, note_tags(tags(*))")
+    .select(NOTE_WITH_TAGS_SELECT)
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
@@ -144,4 +146,123 @@ export async function createNoteWithTags(
     note.tags = [];
     return { note, tagsAttached: false };
   }
+}
+
+async function readNoteWithTags(
+  supabase: SupabaseClient,
+  userId: string,
+  noteId: string,
+): Promise<NoteWithTags | null> {
+  const { data, error } = await supabase
+    .from("notes")
+    .select(NOTE_WITH_TAGS_SELECT)
+    .eq("id", noteId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to read note: ${error.message}`);
+  }
+  if (!data) {
+    return null;
+  }
+  return flattenNoteRow(data as unknown as NoteTagJoinRow);
+}
+
+// Update a note's content and/or tags, enforcing content-first write ordering (Guardrail #2).
+// Ownership is gated with a leading SELECT so every input shape (content-only, tags-only,
+// empty no-op) can 404 uniformly, and so findOrCreateTags never creates orphan tags for a
+// note the caller can't touch. updated_at is left to the notes_set_updated_at trigger.
+export async function updateNoteWithTags(
+  supabase: SupabaseClient,
+  userId: string,
+  noteId: string,
+  { content, tagNames }: UpdateNoteDTO,
+): Promise<UpdateNoteResponse | null> {
+  const owned = await supabase.from("notes").select("id").eq("id", noteId).eq("user_id", userId).maybeSingle();
+
+  if (owned.error) {
+    throw new Error(`Failed to load note: ${owned.error.message}`);
+  }
+  if (!owned.data) {
+    return null;
+  }
+
+  if (content !== undefined) {
+    const { error } = await supabase.from("notes").update({ content }).eq("id", noteId).eq("user_id", userId);
+    if (error) {
+      throw new Error(`Failed to update note: ${error.message}`);
+    }
+  }
+
+  let tagsAttached = true;
+
+  if (tagNames !== undefined) {
+    try {
+      const targetTags = await findOrCreateTags(supabase, userId, tagNames);
+      const targetIds = new Set(targetTags.map((tag) => tag.id));
+
+      const currentLinks = await supabase
+        .from("note_tags")
+        .select("tag_id")
+        .eq("note_id", noteId)
+        .eq("user_id", userId);
+      if (currentLinks.error) {
+        throw new Error(`Failed to list note tags: ${currentLinks.error.message}`);
+      }
+
+      const currentIds = new Set(currentLinks.data.map((row) => row.tag_id as string));
+      const toRemove = [...currentIds].filter((id) => !targetIds.has(id));
+      const toAdd = [...targetIds].filter((id) => !currentIds.has(id));
+
+      if (toRemove.length > 0) {
+        const { error } = await supabase
+          .from("note_tags")
+          .delete()
+          .eq("note_id", noteId)
+          .eq("user_id", userId)
+          .in("tag_id", toRemove);
+        if (error) {
+          throw new Error(`Failed to unlink tags: ${error.message}`);
+        }
+      }
+
+      if (toAdd.length > 0) {
+        const links = toAdd.map((tag_id) => ({
+          note_id: noteId,
+          tag_id,
+          user_id: userId,
+        }));
+        const { error } = await supabase.from("note_tags").insert(links);
+        if (error) {
+          throw new Error(`Failed to link tags: ${error.message}`);
+        }
+      }
+    } catch (e) {
+      // Content-first ordering: the content update (if any) is already saved. Surface
+      // the partial success rather than discarding the edit (Guardrail #2). Log so
+      // the degradation is diagnosable.
+      // eslint-disable-next-line no-console -- intentional server-side error log
+      console.error("updateNoteWithTags: tag re-sync failed; content saved", e);
+      tagsAttached = false;
+    }
+  }
+
+  const note = await readNoteWithTags(supabase, userId, noteId);
+  if (!note) {
+    throw new Error("Failed to re-read note: no row returned");
+  }
+  return { note, tagsAttached };
+}
+
+// Hard-delete a note the user owns. note_tags links cascade at the DB (on delete cascade);
+// 0 matching rows is a not-found signal for the route to map to 404.
+export async function deleteNote(supabase: SupabaseClient, userId: string, noteId: string): Promise<boolean> {
+  const { data, error } = await supabase.from("notes").delete().eq("id", noteId).eq("user_id", userId).select("id");
+
+  if (error) {
+    throw new Error(`Failed to delete note: ${error.message}`);
+  }
+
+  return data.length > 0;
 }

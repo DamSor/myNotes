@@ -2,7 +2,8 @@
 // Entities mirror the SQL schema in supabase/migrations/*_notes_tags_note_tags_schema_rls.sql
 // exactly (uuid -> string, timestamptz -> ISO string). DTOs describe the shapes the
 // data API accepts/returns. Slice S-01 (capture-note-with-tag) owns the note create/read
-// contract below (JSON + zod-validated); S-03 owns note updates.
+// contract below (JSON + zod-validated); S-03 owns the note update contract (partial PATCH
+// with tagNames, mirroring create).
 
 export interface Note {
   id: string;
@@ -46,10 +47,19 @@ export interface CreateNoteResponse {
   tagsAttached: boolean;
 }
 
-// S-03 owns note updates; kept as-is for now.
+// S-03 update contract: partial PATCH. Each field is optional; omitted fields are left
+// unchanged. When tagNames is present it is the full desired set (same name-based
+// resolution as create); an explicit [] clears all tags. Empty {} is a no-op.
 export interface UpdateNoteDTO {
   content?: string;
-  tagIds?: string[];
+  tagNames?: string[];
+}
+
+// Update response: content-first partial-success (Guardrail #2). tagsAttached === false
+// means the content (if sent) was saved but the tag-link re-sync failed.
+export interface UpdateNoteResponse {
+  note: NoteWithTags;
+  tagsAttached: boolean;
 }
 
 export interface CreateTagDTO {
