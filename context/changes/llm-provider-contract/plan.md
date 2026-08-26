@@ -196,26 +196,26 @@ Setting the production secret is part of **this** change's rollout, not deferred
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npx astro check`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Production build succeeds: `npm run build`
+- [x] 1.1 Type checking passes: `npx astro check` — 6b855d1
+- [x] 1.2 Linting passes: `npm run lint` — 6b855d1
+- [x] 1.3 Production build succeeds: `npm run build` — 6b855d1
 
 #### Manual
 
-- [x] 1.4 App boots without the key; OpenRouter listed in missing-config surface
-- [x] 1.5 `isLlmConfigured()` false without key, true once set in `.dev.vars`
+- [x] 1.4 App boots without the key; OpenRouter listed in missing-config surface — 6b855d1
+- [x] 1.5 `isLlmConfigured()` false without key, true once set in `.dev.vars` — 6b855d1
 
 ### Phase 2: Decision record + live proof
 
 #### Automated
 
-- [ ] 2.1 Linting passes after doc edits: `npm run lint`
-- [ ] 2.2 Build still succeeds: `npm run build`
+- [x] 2.1 Linting passes after doc edits: `npm run lint`
+- [x] 2.2 Build still succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 2.3 Live `chatCompletion` call returns non-empty text
-- [ ] 2.4 Call succeeds with `provider: { data_collection: "deny" }` present
-- [ ] 2.5 Bad key yields a logged `LlmRequestError`, no unhandled crash
-- [ ] 2.6 `AGENTS.md` states the opt-out decision unambiguously
-- [ ] 2.7 Production secret set (`wrangler secret put`); config-status banner absent in prod
+- [x] 2.3 Live `chatCompletion` call returns non-empty text
+- [x] 2.4 Call succeeds with `provider: { data_collection: "deny" }` present
+- [x] 2.5 Bad key yields a logged `LlmRequestError`, no unhandled crash
+- [x] 2.6 `AGENTS.md` states the opt-out decision unambiguously
+- [x] 2.7 Production secret set (`wrangler secret put`); config-status banner absent in prod

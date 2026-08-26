@@ -10,7 +10,15 @@ myNotes is an Astro 6 SSR app with React 19 islands, Tailwind 4, Supabase cookie
 - Merge Tailwind classes with `cn()` from `@/lib/utils`; never concatenate class strings manually.
 - API routes use uppercase `GET`/`POST` exports and validate input with zod.
 - Supabase migrations live in `supabase/migrations/` as `YYYYMMDDHHmmss_short_description.sql` with RLS enabled on every new table.
-- Never commit secrets. Copy @.env.example to `.env` and `.dev.vars` for `SUPABASE_URL` and `SUPABASE_KEY`.
+- Never commit secrets. Copy @.env.example to `.env` and `.dev.vars` for `SUPABASE_URL`, `SUPABASE_KEY`, and `OPENROUTER_API_KEY`.
+
+## LLM / AI
+
+- OpenRouter is the only LLM provider. All calls go through `src/lib/services/llm.ts` (`chatCompletion` / `isLlmConfigured`) — no ad-hoc `fetch` to provider APIs.
+- Training opt-out is enforced two ways: (1) every request body includes `provider: { data_collection: "deny" }` (not caller-optional); (2) account privacy defaults stay off — prompt logging and "use of inputs/outputs" (both default-off). Never relax `data_collection` to make a model route.
+- `zdr: true` is intentionally not set at MVP (it shrinks the endpoint pool). Revisit only if compliance demands it.
+- Default model is the pinned Haiku-class constant `DEFAULT_LLM_MODEL` in `src/lib/services/llm.ts` (`anthropic/claude-haiku-4.5`). Override per-call via `opts.model` when needed.
+- Runtime is Cloudflare workerd: `fetch` only, no Node built-ins. Keep response handling to a single `res.json()` plus direct field access (Free-tier 10 ms CPU cap).
 
 ## Project Structure
 
