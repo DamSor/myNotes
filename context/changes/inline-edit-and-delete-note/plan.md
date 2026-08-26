@@ -277,33 +277,33 @@ No schema migration — F-01 already provides UPDATE/DELETE RLS policies, `on de
 
 #### Automated
 
-- [x] 2.1 Build passes: `npm run build`
-- [x] 2.2 Lint passes: `npm run lint`
-- [x] 2.3 Route exports `const prerender = false`
+- [x] 2.1 Build passes: `npm run build` — eecf231
+- [x] 2.2 Lint passes: `npm run lint` — eecf231
+- [x] 2.3 Route exports `const prerender = false` — eecf231
 
 #### Manual
 
-- [x] 2.4 `PATCH` content-only returns 200 with updated content, unchanged tags, advanced `updated_at`
-- [x] 2.5 `PATCH` tags re-syncs (case-insensitive collapse, create-new, `[]` clears all)
-- [x] 2.6 `PATCH` empty/whitespace content returns 400 and changes nothing
-- [x] 2.7 `PATCH`/`DELETE` on another user's note id returns 404, no leak
-- [x] 2.8 `DELETE` returns 200 `{ id }`; note gone from `GET /api/notes`; `note_tags` links cascaded
-- [x] 2.9 Unauthenticated `PATCH`/`DELETE` returns 401
+- [x] 2.4 `PATCH` content-only returns 200 with updated content, unchanged tags, advanced `updated_at` — eecf231
+- [x] 2.5 `PATCH` tags re-syncs (case-insensitive collapse, create-new, `[]` clears all) — eecf231
+- [x] 2.6 `PATCH` empty/whitespace content returns 400 and changes nothing — eecf231
+- [x] 2.7 `PATCH`/`DELETE` on another user's note id returns 404, no leak — eecf231
+- [x] 2.8 `DELETE` returns 200 `{ id }`; note gone from `GET /api/notes`; `note_tags` links cascaded — eecf231
+- [x] 2.9 Unauthenticated `PATCH`/`DELETE` returns 401 — eecf231
 
 ### Phase 3: Inline Edit + Delete UI
 
 #### Automated
 
-- [ ] 3.1 Build passes: `npm run build`
-- [ ] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Build passes: `npm run build`
+- [x] 3.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 Each row shows Edit + Delete controls; list unchanged at rest
-- [ ] 3.4 Edit opens an inline form seeded with content + tag chips; Save disabled when content blank
-- [ ] 3.5 Content-only edit replaces the row in place; date unchanged, order preserved
-- [ ] 3.6 Tag edit (add existing, add new, remove) reflects on the row; new tag appears in later typeahead
-- [ ] 3.7 Cancel discards changes and returns to read mode
-- [ ] 3.8 Delete opens confirm dialog; confirm removes row (stays gone after reload); dismiss keeps note
-- [ ] 3.9 Partial tag-attach failure surfaces a non-fatal notice while content edit persists (code-path verified)
-- [ ] 3.10 Signed-out `/notes` redirects; second user cannot edit/delete first user's notes (404)
+- [x] 3.3 Each row shows Edit + Delete controls; list unchanged at rest
+- [x] 3.4 Edit opens an inline form seeded with content + tag chips; Save disabled when content blank
+- [x] 3.5 Content-only edit replaces the row in place; date unchanged, order preserved
+- [x] 3.6 Tag edit (add existing, add new, remove) reflects on the row; new tag appears in later typeahead
+- [x] 3.7 Cancel discards changes and returns to read mode
+- [x] 3.8 Delete opens confirm dialog; confirm removes row (stays gone after reload); dismiss keeps note
+- [x] 3.9 Partial tag-attach failure surfaces a non-fatal notice while content edit persists (code-path verified)
+- [x] 3.10 Signed-out `/notes` redirects; second user cannot edit/delete first user's notes (404)

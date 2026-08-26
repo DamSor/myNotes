@@ -18,7 +18,7 @@ interface NoteCaptureProps {
 // NoteItem so their markup can never diverge. Save awaits the server-returned row, then
 // prepends it (via useNotes) for a truthful, refetch-free update.
 export default function NoteCapture({ initialNotes, initialTags }: NoteCaptureProps) {
-  const { notes, tags, createNote } = useNotes(initialNotes, initialTags);
+  const { notes, tags, createNote, updateNote, deleteNote } = useNotes(initialNotes, initialTags);
   const [content, setContent] = useState("");
   const [tagNames, setTagNames] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -81,7 +81,7 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
       ) : (
         <ul className="space-y-3">
           {notes.map((note) => (
-            <NoteItem key={note.id} note={note} />
+            <NoteItem key={note.id} note={note} availableTags={tags} onUpdate={updateNote} onDelete={deleteNote} />
           ))}
         </ul>
       )}

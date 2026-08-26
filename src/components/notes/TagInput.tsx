@@ -7,12 +7,13 @@ interface TagInputProps {
   available: Tag[];
   selected: string[];
   onChange: (names: string[]) => void;
+  id?: string;
 }
 
 // Chip + typeahead tag input. Suggestions are filtered in-memory from the user's own tags
 // (zero per-keystroke latency); a name matching none can be created on the fly (FR-009).
 // Selection is case-insensitively deduped so the same tag can't be added twice.
-export function TagInput({ available, selected, onChange }: TagInputProps) {
+export function TagInput({ available, selected, onChange, id = "tag-input" }: TagInputProps) {
   const [input, setInput] = useState("");
 
   const query = input.trim().toLowerCase();
@@ -51,7 +52,7 @@ export function TagInput({ available, selected, onChange }: TagInputProps) {
 
   return (
     <div>
-      <label htmlFor="tag-input" className="mb-1 block text-sm text-blue-100/80">
+      <label htmlFor={id} className="mb-1 block text-sm text-blue-100/80">
         Tags
       </label>
 
@@ -83,7 +84,7 @@ export function TagInput({ available, selected, onChange }: TagInputProps) {
           <TagIcon className="size-4" />
         </span>
         <input
-          id="tag-input"
+          id={id}
           type="text"
           value={input}
           onChange={(e) => {
