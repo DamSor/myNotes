@@ -65,3 +65,25 @@ export interface UpdateNoteResponse {
 export interface CreateTagDTO {
   name: string;
 }
+
+// F-02 LLM wrapper contract: prompt-agnostic chat completion shapes consumed by
+// S-02 (digest) and S-08 (weekly summary). The wrapper lives in src/lib/services/llm.ts.
+export interface LlmMessage {
+  role: "system" | "user" | "assistant";
+  content: string;
+}
+
+export interface LlmCompletionOptions {
+  model?: string;
+  temperature?: number;
+  maxTokens?: number;
+}
+
+export interface LlmCompletion {
+  text: string;
+  usage?: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
+}
