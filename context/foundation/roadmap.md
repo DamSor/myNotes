@@ -30,7 +30,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | ID   | Change ID                     | Outcome (user can / foundation)                                                                       | Prerequisites          | PRD refs                    | Status   |
 | ---- | ----------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- | --------------------------- | -------- |
 | F-01 | `notes-schema-and-rls`        | (foundation) schemat `notes` + `tags` + `note_tags` z RLS per-operacja wdrożony                       | —                      | Access Control, Guardrail#1 | done     |
-| F-02 | `llm-provider-contract`       | (foundation) integracja z OpenRouter + decyzja o training-opt-out zablokowana                         | —                      | Guardrail#3, OQ#3           | in-progress |
+| F-02 | `llm-provider-contract`       | (foundation) integracja z OpenRouter + decyzja o training-opt-out zablokowana                         | —                      | Guardrail#3, OQ#3           | done |
 | S-01 | `capture-note-with-tag`       | user tworzy notatkę plain-text z tagami (typeahead) i widzi ją w płaskiej liście                      | F-01                   | FR-004, FR-005, FR-009, FR-010 | done |
 | S-02 | `first-ai-digest-on-click`    | user klika "Generuj digest" dla wybranego tagu i widzi digest AI w sekcji "AI dla mnie" (NORTH STAR)  | S-01, F-02             | FR-015, FR-016              | proposed |
 | S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | done |
@@ -88,7 +88,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **Unknowns:**
   - Który plan OpenRouter (lub inny model) faktycznie zapewnia training-opt-out kontraktowo, a nie tylko w politykach? — Owner: user. Block: yes.
 - **Risk:** Bez tej decyzji guardrail izolacji danych nie ma pełnej definicji poza granicą aplikacji (PRD OQ#3 explicite). Foundation trzymana `blocked` do rozwiązania — próba wystartowania S-02 bez tego = kompromis guardrailu; roadmap ma to zatrzymać przed `/10x-plan`.
-- **Status:** in-progress
+- **Status:** done
 
 ## Slices
 
@@ -238,3 +238,4 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **F-01: (foundation) schemat `notes`, `tags`, `note_tags` z RLS per-operacja wdrożony w Supabase — każdy zalogowany użytkownik może operować tylko na własnych wierszach, brak dostępu cross-account.** — Archived 2026-08-19 → `context/archive/2026-08-19-notes-schema-and-rls/`. Lesson: —.
 - **S-01: user może utworzyć notatkę zawierającą wyłącznie plain text, przypisać do niej jedną lub wiele etykiet (z typeahead z własnych istniejących tagów), i zobaczyć ją w płaskiej liście posortowanej od najnowszej z datą utworzenia jako pierwszym wierszem.** — Archived 2026-08-25 → `context/archive/2026-08-25-capture-note-with-tag/`. Lesson: —.
 - **S-03: user w liście notatek klika wiersz i edytuje treść notatki oraz przypisanie tagów bezpośrednio inline (bez nawigacji do osobnego widoku); user może definitywnie usunąć notatkę po potwierdzeniu w dialogu.** — Archived 2026-08-26 → `context/archive/2026-08-26-inline-edit-and-delete-note/`. Lesson: —.
+- **F-02: (foundation) integracja z OpenRouter wdrożona — `OPENROUTER_API_KEY` w produkcji (`wrangler secret put`) i w `.dev.vars`, thin wrapper `src/lib/services/llm.ts`, decyzja o training-opt-out zapisana w AGENTS.md.** — Archived 2026-08-26 → `context/archive/2026-08-26-llm-provider-contract/`. Lesson: —.
