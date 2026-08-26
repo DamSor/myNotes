@@ -1,7 +1,8 @@
 ---
 change_id: inline-edit-and-delete-note
 title: Edytuj notatkę inline (treść + tagi) i usuń ją po potwierdzeniu w dialogu
-status: impl_reviewed
+status: archived
+archived_at: 2026-08-26T06:53:10Z
 created: 2026-08-26
 updated: 2026-08-26
 ---

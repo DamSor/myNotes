@@ -33,7 +33,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | F-02 | `llm-provider-contract`       | (foundation) integracja z OpenRouter + decyzja o training-opt-out zablokowana                         | —                      | Guardrail#3, OQ#3           | blocked  |
 | S-01 | `capture-note-with-tag`       | user tworzy notatkę plain-text z tagami (typeahead) i widzi ją w płaskiej liście                      | F-01                   | FR-004, FR-005, FR-009, FR-010 | done |
 | S-02 | `first-ai-digest-on-click`    | user klika "Generuj digest" dla wybranego tagu i widzi digest AI w sekcji "AI dla mnie" (NORTH STAR)  | S-01, F-02             | FR-015, FR-016              | proposed |
-| S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | in-progress |
+| S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | done |
 | S-04 | `single-tag-filter`           | user filtruje listę notatek po pojedynczej etykiecie                                                  | S-01                   | FR-011                      | proposed |
 | S-05 | `text-search`                 | user wyszukuje notatki po fragmencie tekstu (case-insensitive, substring)                             | S-01                   | FR-020                      | proposed |
 | S-06 | `edit-or-delete-digest`       | user edytuje digest inline lub usuwa go w sekcji "AI dla mnie" (sygnały 70% akceptacji)               | S-02                   | FR-017                      | proposed |
@@ -128,7 +128,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **Blockers:** —.
 - **Unknowns:** —.
 - **Risk:** Inline-edit + delete-dialog dotykają tego samego wiersza listy — konflikt UX (klik = edit vs. klik = delete) jest realny; wymaga jasnego rozdzielenia hitboxów i keyboard shortcuts. Twardy delete zaakceptowany świadomie (brak kosza) — dialog potwierdzenia jest minimalnym zabezpieczeniem.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-04: Filtruj notatki po pojedynczym tagu
 
@@ -237,3 +237,4 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 
 - **F-01: (foundation) schemat `notes`, `tags`, `note_tags` z RLS per-operacja wdrożony w Supabase — każdy zalogowany użytkownik może operować tylko na własnych wierszach, brak dostępu cross-account.** — Archived 2026-08-19 → `context/archive/2026-08-19-notes-schema-and-rls/`. Lesson: —.
 - **S-01: user może utworzyć notatkę zawierającą wyłącznie plain text, przypisać do niej jedną lub wiele etykiet (z typeahead z własnych istniejących tagów), i zobaczyć ją w płaskiej liście posortowanej od najnowszej z datą utworzenia jako pierwszym wierszem.** — Archived 2026-08-25 → `context/archive/2026-08-25-capture-note-with-tag/`. Lesson: —.
+- **S-03: user w liście notatek klika wiersz i edytuje treść notatki oraz przypisanie tagów bezpośrednio inline (bez nawigacji do osobnego widoku); user może definitywnie usunąć notatkę po potwierdzeniu w dialogu.** — Archived 2026-08-26 → `context/archive/2026-08-26-inline-edit-and-delete-note/`. Lesson: —.
