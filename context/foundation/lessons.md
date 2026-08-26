@@ -16,6 +16,13 @@
 - **Rule**: When a catch intentionally degrades to a partial-success result, always log the underlying error (`console.error`) before returning — never swallow it.
 - **Applies to**: src/lib/services/**/*.ts
 
+## Validate dynamic route params before forwarding to the service layer
+
+- **Context**: src/pages/api/notes/[id].ts — dynamic API route accepting a path param as an entity identifier.
+- **Problem**: URL path params (e.g. `:id`) forwarded unsanitized to the service cause PostgREST to throw on invalid input syntax (22P02), surfacing as a generic 500 instead of a clean 404/400 — breaking the expectation that invalid/missing/non-owned IDs all return 404.
+- **Rule**: Validate path params (z.string().uuid() or similar) at the route level before calling service functions; return 404 on invalid format.
+- **Applies to**: src/pages/api/**/*.ts (any dynamic [param] route)
+
 ## Hoist shared API helpers in the convention-setting slice, don't copy-paste
 
 - **Context**: src/pages/api/notes.ts:8-13, src/pages/api/tags.ts:7-12 — an identical `json(body, status)` Response helper copy-pasted into both new routes.

@@ -1,10 +1,13 @@
 import type { APIRoute } from "astro";
+import { z } from "zod";
 import { createClient } from "@/lib/supabase";
 import { json } from "@/lib/http";
 import { updateNoteSchema } from "@/lib/validation/notes";
 import { deleteNote, updateNoteWithTags } from "@/lib/services/notes";
 
 export const prerender = false;
+
+const uuidSchema = z.uuid();
 
 // PATCH /api/notes/:id — partial update of content and/or tags (names resolved server-side).
 // DELETE /api/notes/:id — hard-delete the note; note_tags links cascade at the DB.
@@ -15,7 +18,7 @@ export const PATCH: APIRoute = async (context) => {
   }
 
   const id = context.params.id;
-  if (!id) {
+  if (!id || !uuidSchema.safeParse(id).success) {
     return json({ error: "Note not found" }, 404);
   }
 
@@ -56,7 +59,7 @@ export const DELETE: APIRoute = async (context) => {
   }
 
   const id = context.params.id;
-  if (!id) {
+  if (!id || !uuidSchema.safeParse(id).success) {
     return json({ error: "Note not found" }, 404);
   }
 

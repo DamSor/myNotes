@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -47,6 +47,8 @@ export function NoteItem({ note, availableTags, onUpdate, onDelete }: NoteItemPr
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const savingRef = useRef(false);
+  const deletingRef = useRef(false);
 
   const canSave = draftContent.trim().length > 0;
 
@@ -66,6 +68,7 @@ export function NoteItem({ note, availableTags, onUpdate, onDelete }: NoteItemPr
   }
 
   async function handleSave() {
+    if (savingRef.current) return;
     setError(null);
     setWarning(null);
     if (!canSave) return;
@@ -81,6 +84,7 @@ export function NoteItem({ note, availableTags, onUpdate, onDelete }: NoteItemPr
       return;
     }
 
+    savingRef.current = true;
     setIsSaving(true);
     try {
       const result = await onUpdate(note.id, patch);
@@ -91,19 +95,24 @@ export function NoteItem({ note, availableTags, onUpdate, onDelete }: NoteItemPr
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to update note");
     } finally {
+      savingRef.current = false;
       setIsSaving(false);
     }
   }
 
   async function handleConfirmDelete() {
+    if (deletingRef.current) return;
+    deletingRef.current = true;
     setError(null);
     setIsDeleting(true);
     try {
       await onDelete(note.id);
       setDeleteOpen(false);
     } catch (e) {
+      setDeleteOpen(false);
       setError(e instanceof Error ? e.message : "Failed to delete note");
     } finally {
+      deletingRef.current = false;
       setIsDeleting(false);
     }
   }
