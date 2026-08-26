@@ -209,13 +209,13 @@ Setting the production secret is part of **this** change's rollout, not deferred
 
 #### Automated
 
-- [x] 2.1 Linting passes after doc edits: `npm run lint`
-- [x] 2.2 Build still succeeds: `npm run build`
+- [x] 2.1 Linting passes after doc edits: `npm run lint` — 0cc2227
+- [x] 2.2 Build still succeeds: `npm run build` — 0cc2227
 
 #### Manual
 
-- [x] 2.3 Live `chatCompletion` call returns non-empty text
-- [x] 2.4 Call succeeds with `provider: { data_collection: "deny" }` present
-- [x] 2.5 Bad key yields a logged `LlmRequestError`, no unhandled crash
-- [x] 2.6 `AGENTS.md` states the opt-out decision unambiguously
-- [x] 2.7 Production secret set (`wrangler secret put`); config-status banner absent in prod
+- [x] 2.3 Live `chatCompletion` call returns non-empty text — 0cc2227
+- [x] 2.4 Call succeeds with `provider: { data_collection: "deny" }` present — 0cc2227
+- [x] 2.5 Bad key yields a logged `LlmRequestError`, no unhandled crash — 0cc2227
+- [x] 2.6 `AGENTS.md` states the opt-out decision unambiguously — 0cc2227
+- [x] 2.7 Production secret set (`wrangler secret put`); config-status banner absent in prod — 0cc2227
