@@ -1,7 +1,7 @@
 ---
 change_id: llm-provider-contract
 title: Kontrakt integracji z LLM providerem (OpenRouter + training opt-out)
-status: implemented
+status: impl_reviewed
 created: 2026-08-26
 updated: 2026-08-26
 archived_at: null

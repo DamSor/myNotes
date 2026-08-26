@@ -76,6 +76,9 @@ export async function chatCompletion(messages: LlmMessage[], opts?: LlmCompletio
   if (!OPENROUTER_API_KEY) {
     throw new LlmNotConfiguredError();
   }
+  if (messages.length === 0) {
+    throw new LlmRequestError("messages must not be empty");
+  }
 
   const body: {
     model: string;
@@ -95,6 +98,11 @@ export async function chatCompletion(messages: LlmMessage[], opts?: LlmCompletio
     body.max_tokens = opts.maxTokens;
   }
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => {
+    controller.abort();
+  }, 25_000);
+
   let res: Response;
   try {
     res = await fetch(OPENROUTER_CHAT_URL, {
@@ -106,11 +114,18 @@ export async function chatCompletion(messages: LlmMessage[], opts?: LlmCompletio
         "X-Title": OPENROUTER_APP_TITLE,
       },
       body: JSON.stringify(body),
+      signal: controller.signal,
     });
   } catch (e) {
     // eslint-disable-next-line no-console -- intentional server-side error log
     console.error("chatCompletion: OpenRouter fetch failed", e);
-    throw new LlmRequestError("OpenRouter request failed");
+    const message =
+      e instanceof DOMException && e.name === "AbortError"
+        ? "OpenRouter request timed out"
+        : "OpenRouter request failed";
+    throw new LlmRequestError(message);
+  } finally {
+    clearTimeout(timeout);
   }
 
   let payload: OpenRouterChatResponse;
