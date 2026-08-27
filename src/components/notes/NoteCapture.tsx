@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { NotebookPen } from "lucide-react";
+import { useMemo, useState } from "react";
+import { NotebookPen, X } from "lucide-react";
 import { SubmitButton } from "@/components/auth/SubmitButton";
 import { ServerError } from "@/components/auth/ServerError";
 import { ServerNotice } from "@/components/auth/ServerNotice";
 import { TagInput } from "@/components/notes/TagInput";
 import { NoteItem } from "@/components/notes/NoteItem";
 import { useNotes } from "@/components/hooks/useNotes";
+import { cn } from "@/lib/utils";
 import type { NoteWithTags, Tag } from "@/types";
 
 interface NoteCaptureProps {
@@ -23,6 +24,14 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
   const [tagNames, setTagNames] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
+  const [activeTagId, setActiveTagId] = useState<string | null>(null);
+
+  const sortedTags = useMemo(() => [...tags].sort((a, b) => a.name.localeCompare(b.name)), [tags]);
+
+  const filteredNotes = useMemo(
+    () => (activeTagId ? notes.filter((note) => note.tags.some((tag) => tag.id === activeTagId)) : notes),
+    [notes, activeTagId],
+  );
 
   const canSubmit = content.trim().length > 0;
 
@@ -35,6 +44,7 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
       const result = await createNote(content.trim(), tagNames);
       setContent("");
       setTagNames([]);
+      setActiveTagId(null);
       if (!result.tagsAttached) {
         // Note-first partial success (Guardrail #2): the note is saved, tags aren't.
         setWarning("Note saved, but its tags couldn't be attached. You can add them again.");
@@ -76,11 +86,69 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
         </SubmitButton>
       </form>
 
+      {tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTagId(null);
+            }}
+            className={cn(
+              "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+              activeTagId === null
+                ? "border-purple-400 bg-purple-500/30 text-white"
+                : "border-white/20 bg-white/5 text-blue-100/70 hover:bg-white/10 hover:text-white",
+            )}
+          >
+            All
+          </button>
+          {sortedTags.map((tag) => (
+            <button
+              key={tag.id}
+              type="button"
+              onClick={() => {
+                setActiveTagId(tag.id);
+              }}
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                activeTagId === tag.id
+                  ? "border-purple-400 bg-purple-500/30 text-white"
+                  : "border-white/20 bg-white/5 text-blue-100/70 hover:bg-white/10 hover:text-white",
+              )}
+            >
+              {tag.name}
+              {activeTagId === tag.id && (
+                <span
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Clear ${tag.name} filter`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveTagId(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.stopPropagation();
+                      setActiveTagId(null);
+                    }
+                  }}
+                  className="ml-0.5 inline-flex items-center"
+                >
+                  <X className="size-3" />
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+
       {notes.length === 0 ? (
         <p className="text-center text-sm text-blue-100/50">No notes yet. Write your first one above.</p>
+      ) : filteredNotes.length === 0 ? (
+        <p className="text-center text-sm text-blue-100/50">No notes with this tag.</p>
       ) : (
         <ul className="space-y-3">
-          {notes.map((note) => (
+          {filteredNotes.map((note) => (
             <NoteItem key={note.id} note={note} availableTags={tags} onUpdate={updateNote} onDelete={deleteNote} />
           ))}
         </ul>
