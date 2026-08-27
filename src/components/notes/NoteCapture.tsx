@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { NotebookPen, X } from "lucide-react";
+import { NotebookPen, Search, X } from "lucide-react";
 import { SubmitButton } from "@/components/auth/SubmitButton";
 import { ServerError } from "@/components/auth/ServerError";
 import { ServerNotice } from "@/components/auth/ServerNotice";
@@ -25,13 +25,21 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
   const [activeTagId, setActiveTagId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const sortedTags = useMemo(() => [...tags].sort((a, b) => a.name.localeCompare(b.name)), [tags]);
 
-  const filteredNotes = useMemo(
-    () => (activeTagId ? notes.filter((note) => note.tags.some((tag) => tag.id === activeTagId)) : notes),
-    [notes, activeTagId],
-  );
+  const filteredNotes = useMemo(() => {
+    let result = notes;
+    if (activeTagId) {
+      result = result.filter((note) => note.tags.some((tag) => tag.id === activeTagId));
+    }
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter((note) => note.content.toLowerCase().includes(query));
+    }
+    return result;
+  }, [notes, activeTagId, searchQuery]);
 
   const canSubmit = content.trim().length > 0;
 
@@ -45,6 +53,7 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
       setContent("");
       setTagNames([]);
       setActiveTagId(null);
+      setSearchQuery("");
       if (!result.tagsAttached) {
         // Note-first partial success (Guardrail #2): the note is saved, tags aren't.
         setWarning("Note saved, but its tags couldn't be attached. You can add them again.");
@@ -85,6 +94,31 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
           Save note
         </SubmitButton>
       </form>
+
+      <div className="relative">
+        <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-white/40" />
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+          }}
+          placeholder="Search notes..."
+          className="w-full rounded-lg border border-white/20 bg-white/10 py-2 pr-9 pl-9 text-white placeholder-white/40 transition-colors focus:ring-2 focus:ring-purple-400 focus:outline-none"
+        />
+        {searchQuery && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchQuery("");
+            }}
+            aria-label="Clear search"
+            className="absolute top-1/2 right-3 -translate-y-1/2 text-white/40 hover:text-white"
+          >
+            <X className="size-4" />
+          </button>
+        )}
+      </div>
 
       {tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
@@ -145,7 +179,9 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
       {notes.length === 0 ? (
         <p className="text-center text-sm text-blue-100/50">No notes yet. Write your first one above.</p>
       ) : filteredNotes.length === 0 ? (
-        <p className="text-center text-sm text-blue-100/50">No notes with this tag.</p>
+        <p className="text-center text-sm text-blue-100/50">
+          {searchQuery ? "No notes matching your search." : "No notes with this tag."}
+        </p>
       ) : (
         <ul className="space-y-3">
           {filteredNotes.map((note) => (
