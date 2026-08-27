@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { NotebookPen, Search, X } from "lucide-react";
+import { Loader2, NotebookPen, Search, Sparkles, X } from "lucide-react";
 import { SubmitButton } from "@/components/auth/SubmitButton";
 import { ServerError } from "@/components/auth/ServerError";
 import { ServerNotice } from "@/components/auth/ServerNotice";
@@ -26,6 +26,8 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
   const [warning, setWarning] = useState<string | null>(null);
   const [activeTagId, setActiveTagId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [digestLoading, setDigestLoading] = useState(false);
+  const [digestError, setDigestError] = useState<string | null>(null);
 
   const sortedTags = useMemo(() => [...tags].sort((a, b) => a.name.localeCompare(b.name)), [tags]);
 
@@ -42,6 +44,29 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
   }, [notes, activeTagId, searchQuery]);
 
   const canSubmit = content.trim().length > 0;
+
+  async function handleGenerateDigest() {
+    if (!activeTagId) return;
+    setDigestError(null);
+    setDigestLoading(true);
+    try {
+      const res = await fetch("/api/digests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tagId: activeTagId }),
+      });
+      const body = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        setDigestError(body.error ?? "Failed to generate digest");
+        return;
+      }
+      window.location.href = "/ai";
+    } catch (_e) {
+      setDigestError("Failed to generate digest. Please try again.");
+    } finally {
+      setDigestLoading(false);
+    }
+  }
 
   async function handleSubmit() {
     setError(null);
@@ -121,58 +146,91 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
       </div>
 
       {tags.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTagId(null);
-            }}
-            className={cn(
-              "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
-              activeTagId === null
-                ? "border-purple-400 bg-purple-500/30 text-white"
-                : "border-white/20 bg-white/5 text-blue-100/70 hover:bg-white/10 hover:text-white",
-            )}
-          >
-            All
-          </button>
-          {sortedTags.map((tag) => (
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
-              key={tag.id}
               type="button"
               onClick={() => {
-                setActiveTagId(tag.id);
+                setActiveTagId(null);
+                setDigestError(null);
               }}
               className={cn(
-                "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
-                activeTagId === tag.id
+                "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                activeTagId === null
                   ? "border-purple-400 bg-purple-500/30 text-white"
                   : "border-white/20 bg-white/5 text-blue-100/70 hover:bg-white/10 hover:text-white",
               )}
             >
-              {tag.name}
-              {activeTagId === tag.id && (
-                <span
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Clear ${tag.name} filter`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveTagId(null);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
+              All
+            </button>
+            {sortedTags.map((tag) => (
+              <button
+                key={tag.id}
+                type="button"
+                onClick={() => {
+                  setActiveTagId(tag.id);
+                  setDigestError(null);
+                }}
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                  activeTagId === tag.id
+                    ? "border-purple-400 bg-purple-500/30 text-white"
+                    : "border-white/20 bg-white/5 text-blue-100/70 hover:bg-white/10 hover:text-white",
+                )}
+              >
+                {tag.name}
+                {activeTagId === tag.id && (
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Clear ${tag.name} filter`}
+                    onClick={(e) => {
                       e.stopPropagation();
                       setActiveTagId(null);
-                    }
-                  }}
-                  className="ml-0.5 inline-flex items-center"
-                >
-                  <X className="size-3" />
-                </span>
-              )}
-            </button>
-          ))}
+                      setDigestError(null);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.stopPropagation();
+                        setActiveTagId(null);
+                        setDigestError(null);
+                      }
+                    }}
+                    className="ml-0.5 inline-flex items-center"
+                  >
+                    <X className="size-3" />
+                  </span>
+                )}
+              </button>
+            ))}
+            {activeTagId && (
+              <button
+                type="button"
+                onClick={() => void handleGenerateDigest()}
+                disabled={digestLoading}
+                className={cn(
+                  "ml-auto inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                  "border-emerald-400/50 bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30",
+                  digestLoading && "cursor-not-allowed opacity-60",
+                )}
+              >
+                {digestLoading ? <Loader2 className="size-3 animate-spin" /> : <Sparkles className="size-3" />}
+                {digestLoading ? "Generating..." : "Generate digest"}
+              </button>
+            )}
+          </div>
+          {digestError && (
+            <div className="flex items-center gap-2 text-xs text-red-300">
+              <span>{digestError}</span>
+              <button
+                type="button"
+                onClick={() => void handleGenerateDigest()}
+                className="underline hover:text-red-200"
+              >
+                Try again
+              </button>
+            </div>
+          )}
         </div>
       )}
 

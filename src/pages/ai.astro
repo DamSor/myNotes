@@ -1,0 +1,33 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import DigestList from "@/components/ai/DigestList";
+import { createClient } from "@/lib/supabase";
+import { listDigests } from "@/lib/services/digest";
+import type { AiContentWithTag } from "@/types";
+
+const { user } = Astro.locals;
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+
+let initialDigests: AiContentWithTag[] = [];
+if (supabase && user) {
+  initialDigests = await listDigests(supabase, user.id);
+}
+---
+
+<Layout title="AI for me">
+  <div class="bg-cosmic min-h-screen p-4">
+    <div class="mx-auto w-full max-w-2xl py-8">
+      <nav class="mb-6 flex items-center gap-4 text-sm">
+        <a href="/dashboard" class="text-blue-100/60 transition-colors hover:text-white">Dashboard</a>
+        <a href="/notes" class="text-blue-100/60 transition-colors hover:text-white">Notes</a>
+        <a href="/ai" class="font-medium text-white">AI for me</a>
+      </nav>
+      <h1
+        class="mb-6 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-center text-3xl font-bold text-transparent"
+      >
+        AI for me
+      </h1>
+      <DigestList initialDigests={initialDigests} client:load />
+    </div>
+  </div>
+</Layout>

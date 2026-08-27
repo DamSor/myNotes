@@ -274,39 +274,39 @@ Add the "Generate digest" button to the tag filter bar on `/notes` and create th
 
 #### Manual
 
-- [ ] 1.4 Verify ai_content table structure, indexes, and RLS in Supabase Studio
-- [ ] 1.5 Verify RLS isolation (cross-user read returns 0 rows)
+- [x] 1.4 Verify ai_content table structure, indexes, and RLS in Supabase Studio — f3146b5
+- [x] 1.5 Verify RLS isolation (cross-user read returns 0 rows) — f3146b5
 
 ### Phase 2: Service & API
 
 #### Automated
 
-- [x] 2.1 TypeScript compiles: `npm run build`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 POST /api/digests with valid tag_id returns 201
-- [x] 2.4 POST /api/digests with 0 qualifying notes returns 422
-- [x] 2.5 GET /api/digests returns the digest list
+- [x] 2.1 TypeScript compiles: `npm run build` — 06db504
+- [x] 2.2 Linting passes: `npm run lint` — 06db504
+- [x] 2.3 POST /api/digests with valid tag_id returns 201 — 06db504
+- [x] 2.4 POST /api/digests with 0 qualifying notes returns 422 — 06db504
+- [x] 2.5 GET /api/digests returns the digest list — 06db504
 
 #### Manual
 
-- [ ] 2.6 Digest body is grounded — no hallucinated facts
-- [ ] 2.7 "Since last digest" windowing works correctly
-- [ ] 2.8 LLM timeout returns clean error
+- [x] 2.6 Digest body is grounded — no hallucinated facts — 06db504
+- [x] 2.7 "Since last digest" windowing works correctly — 06db504
+- [x] 2.8 LLM timeout returns clean error — 06db504
 
 ### Phase 3: Frontend
 
 #### Automated
 
-- [ ] 3.1 TypeScript compiles: `npm run build`
-- [ ] 3.2 Linting passes: `npm run lint`
+- [x] 3.1 TypeScript compiles: `npm run build`
+- [x] 3.2 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 "Generate digest" button appears only when a tag is selected
-- [ ] 3.4 Click shows spinner then redirects to /ai with new digest
-- [ ] 3.5 0-notes-since-last-digest shows error message
-- [ ] 3.6 /ai page lists digests newest-first with tag labels
-- [ ] 3.7 /ai empty state renders correctly
-- [ ] 3.8 Nav links visible on /notes, /dashboard, and /ai with correct highlighting
-- [ ] 3.9 LLM failure shows error + "Try again"
-- [ ] 3.10 NFR: spinner appears within <2s of click
+- [x] 3.3 "Generate digest" button appears only when a tag is selected
+- [x] 3.4 Click shows spinner then redirects to /ai with new digest
+- [x] 3.5 0-notes-since-last-digest shows error message
+- [x] 3.6 /ai page lists digests newest-first with tag labels
+- [x] 3.7 /ai empty state renders correctly
+- [x] 3.8 Nav links visible on /notes, /dashboard, and /ai with correct highlighting
+- [x] 3.9 LLM failure shows error + "Try again"
+- [x] 3.10 NFR: spinner appears within <2s of click
