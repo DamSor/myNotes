@@ -187,13 +187,13 @@ Client-side filtering via `Array.filter` + `Array.some` on an in-memory array is
 
 #### Automated
 
-- [x] 2.1 Lint passes: `npm run lint`
-- [x] 2.2 Build succeeds: `npm run build`
-- [x] 2.3 No TypeScript errors in changed files
+- [x] 2.1 Lint passes: `npm run lint` — fefb424
+- [x] 2.2 Build succeeds: `npm run build` — fefb424
+- [x] 2.3 No TypeScript errors in changed files — fefb424
 
 #### Manual
 
-- [ ] 2.4 Tag chips show pointer cursor and hover effect
-- [ ] 2.5 Clicking a tag chip activates the filter for that tag
-- [ ] 2.6 Tag chips in edit mode are unaffected
-- [ ] 2.7 Chips render normally without onTagClick prop
+- [x] 2.4 Tag chips show pointer cursor and hover effect — fefb424
+- [x] 2.5 Clicking a tag chip activates the filter for that tag — fefb424
+- [x] 2.6 Tag chips in edit mode are unaffected — fefb424
+- [x] 2.7 Chips render normally without onTagClick prop — fefb424
