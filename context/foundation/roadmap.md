@@ -3,7 +3,7 @@ project: MyNotes
 version: 1
 status: draft
 created: 2026-08-18
-updated: 2026-08-26
+updated: 2026-08-27
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -34,7 +34,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | S-01 | `capture-note-with-tag`       | user tworzy notatkę plain-text z tagami (typeahead) i widzi ją w płaskiej liście                      | F-01                   | FR-004, FR-005, FR-009, FR-010 | done |
 | S-02 | `first-ai-digest-on-click`    | user klika "Generuj digest" dla wybranego tagu i widzi digest AI w sekcji "AI dla mnie" (NORTH STAR)  | S-01, F-02             | FR-015, FR-016              | proposed |
 | S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | done |
-| S-04 | `single-tag-filter`           | user filtruje listę notatek po pojedynczej etykiecie                                                  | S-01                   | FR-011                      | proposed |
+| S-04 | `single-tag-filter`           | user filtruje listę notatek po pojedynczej etykiecie                                                  | S-01                   | FR-011                      | done |
 | S-05 | `text-search`                 | user wyszukuje notatki po fragmencie tekstu (case-insensitive, substring)                             | S-01                   | FR-020                      | proposed |
 | S-06 | `edit-or-delete-digest`       | user edytuje digest inline lub usuwa go w sekcji "AI dla mnie" (sygnały 70% akceptacji)               | S-02                   | FR-017                      | proposed |
 | S-07 | `google-oauth-swap`           | user loguje się przez Google OAuth zamiast przez email+hasło i jawnie się wylogowuje                  | —                      | FR-001, FR-002, FR-003, Access Control | ready    |
@@ -140,7 +140,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **Blockers:** —.
 - **Unknowns:** —.
 - **Risk:** Konsekwentnie z FR-011 — multi-tag filter (AND/OR) świadomie odsunięty do v2. Ryzyko: jeśli user na etapie dogfoodingu naturalnie sięga po wiele tagów jednocześnie, ten slice trafia w mur UX; można wtedy pomyśleć o promocji multi-tag z Parkingu.
-- **Status:** proposed
+- **Status:** done
 
 ### S-05: Wyszukaj notatki po fragmencie tekstu
 
@@ -239,3 +239,4 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **S-01: user może utworzyć notatkę zawierającą wyłącznie plain text, przypisać do niej jedną lub wiele etykiet (z typeahead z własnych istniejących tagów), i zobaczyć ją w płaskiej liście posortowanej od najnowszej z datą utworzenia jako pierwszym wierszem.** — Archived 2026-08-25 → `context/archive/2026-08-25-capture-note-with-tag/`. Lesson: —.
 - **S-03: user w liście notatek klika wiersz i edytuje treść notatki oraz przypisanie tagów bezpośrednio inline (bez nawigacji do osobnego widoku); user może definitywnie usunąć notatkę po potwierdzeniu w dialogu.** — Archived 2026-08-26 → `context/archive/2026-08-26-inline-edit-and-delete-note/`. Lesson: —.
 - **F-02: (foundation) integracja z OpenRouter wdrożona — `OPENROUTER_API_KEY` w produkcji (`wrangler secret put`) i w `.dev.vars`, thin wrapper `src/lib/services/llm.ts`, decyzja o training-opt-out zapisana w AGENTS.md.** — Archived 2026-08-26 → `context/archive/2026-08-26-llm-provider-contract/`. Lesson: —.
+- **S-04: user wybiera pojedynczą etykietę i lista notatek pokazuje tylko notatki oznaczone tym tagiem; wybór drugiego tagu zastępuje pierwszy (single-tag filter, nie multi-select).** — Archived 2026-08-27 → `context/archive/2026-08-27-single-tag-filter/`. Lesson: —.
