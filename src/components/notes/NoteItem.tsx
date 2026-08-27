@@ -15,6 +15,7 @@ import {
 import { ServerError } from "@/components/auth/ServerError";
 import { ServerNotice } from "@/components/auth/ServerNotice";
 import { TagInput } from "@/components/notes/TagInput";
+import { cn } from "@/lib/utils";
 import type { NoteWithTags, Tag, UpdateNoteDTO, UpdateNoteResponse } from "@/types";
 
 interface NoteItemProps {
@@ -22,6 +23,7 @@ interface NoteItemProps {
   availableTags: Tag[];
   onUpdate: (noteId: string, patch: UpdateNoteDTO) => Promise<UpdateNoteResponse>;
   onDelete: (noteId: string) => Promise<void>;
+  onTagClick?: (tagId: string) => void;
 }
 
 function formatDate(iso: string): string {
@@ -38,7 +40,7 @@ function sameTagNames(a: string[], b: string[]): boolean {
   return aLower.every((name, i) => name === bLower[i]);
 }
 
-export function NoteItem({ note, availableTags, onUpdate, onDelete }: NoteItemProps) {
+export function NoteItem({ note, availableTags, onUpdate, onDelete, onTagClick }: NoteItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [draftContent, setDraftContent] = useState(note.content);
   const [draftTagNames, setDraftTagNames] = useState(note.tags.map((tag) => tag.name));
@@ -221,16 +223,27 @@ export function NoteItem({ note, availableTags, onUpdate, onDelete }: NoteItemPr
         <>
           <p className="mt-1 whitespace-pre-wrap text-white">{note.content}</p>
           {note.tags.length > 0 && (
-            <ul className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               {note.tags.map((tag) => (
-                <li
+                <button
                   key={tag.id}
-                  className="rounded-full border border-purple-400/40 bg-purple-500/20 px-2 py-0.5 text-xs text-purple-100"
+                  type="button"
+                  onClick={
+                    onTagClick
+                      ? () => {
+                          onTagClick(tag.id);
+                        }
+                      : undefined
+                  }
+                  className={cn(
+                    "rounded-full border border-purple-400/40 bg-purple-500/20 px-2 py-0.5 text-xs text-purple-100",
+                    onTagClick && "cursor-pointer hover:border-purple-400/60 hover:bg-purple-500/30",
+                  )}
                 >
                   {tag.name}
-                </li>
+                </button>
               ))}
-            </ul>
+            </div>
           )}
           <div className="mt-3 space-y-2 empty:mt-0">
             <ServerError message={error} />

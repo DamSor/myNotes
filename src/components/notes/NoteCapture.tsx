@@ -149,7 +149,14 @@ export default function NoteCapture({ initialNotes, initialTags }: NoteCapturePr
       ) : (
         <ul className="space-y-3">
           {filteredNotes.map((note) => (
-            <NoteItem key={note.id} note={note} availableTags={tags} onUpdate={updateNote} onDelete={deleteNote} />
+            <NoteItem
+              key={note.id}
+              note={note}
+              availableTags={tags}
+              onUpdate={updateNote}
+              onDelete={deleteNote}
+              onTagClick={setActiveTagId}
+            />
           ))}
         </ul>
       )}

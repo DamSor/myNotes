@@ -170,26 +170,26 @@ Client-side filtering via `Array.filter` + `Array.some` on an in-memory array is
 
 #### Automated
 
-- [x] 1.1 Lint passes: `npm run lint`
-- [x] 1.2 Build succeeds: `npm run build`
-- [x] 1.3 No TypeScript errors in changed files
+- [x] 1.1 Lint passes: `npm run lint` — 0803e93
+- [x] 1.2 Build succeeds: `npm run build` — 0803e93
+- [x] 1.3 No TypeScript errors in changed files — 0803e93
 
 #### Manual
 
-- [ ] 1.4 Pill bar appears between capture form and notes list
-- [ ] 1.5 Tag filtering works correctly (single-tag select/replace)
-- [ ] 1.6 Clear filter works via "All" pill and × button
-- [ ] 1.7 Creating a note clears the active filter
-- [ ] 1.8 Empty filtered state shows appropriate message
-- [ ] 1.9 New tag pills appear after note creation
+- [x] 1.4 Pill bar appears between capture form and notes list — 0803e93
+- [x] 1.5 Tag filtering works correctly (single-tag select/replace) — 0803e93
+- [x] 1.6 Clear filter works via "All" pill and × button — 0803e93
+- [x] 1.7 Creating a note clears the active filter — 0803e93
+- [x] 1.8 Empty filtered state shows appropriate message — 0803e93
+- [x] 1.9 New tag pills appear after note creation — 0803e93
 
 ### Phase 2: Clickable Tag Chips in NoteItem
 
 #### Automated
 
-- [ ] 2.1 Lint passes: `npm run lint`
-- [ ] 2.2 Build succeeds: `npm run build`
-- [ ] 2.3 No TypeScript errors in changed files
+- [x] 2.1 Lint passes: `npm run lint`
+- [x] 2.2 Build succeeds: `npm run build`
+- [x] 2.3 No TypeScript errors in changed files
 
 #### Manual
 
