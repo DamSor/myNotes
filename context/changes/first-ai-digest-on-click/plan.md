@@ -268,9 +268,9 @@ Add the "Generate digest" button to the tag filter bar on `/notes` and create th
 
 #### Automated
 
-- [x] 1.1 Migration applies cleanly: `npx supabase db push`
-- [x] 1.2 TypeScript compiles: `npm run build`
-- [x] 1.3 Linting passes: `npm run lint`
+- [x] 1.1 Migration applies cleanly: `npx supabase db push` — f3146b5
+- [x] 1.2 TypeScript compiles: `npm run build` — f3146b5
+- [x] 1.3 Linting passes: `npm run lint` — f3146b5
 
 #### Manual
 
@@ -281,11 +281,11 @@ Add the "Generate digest" button to the tag filter bar on `/notes` and create th
 
 #### Automated
 
-- [ ] 2.1 TypeScript compiles: `npm run build`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 POST /api/digests with valid tag_id returns 201
-- [ ] 2.4 POST /api/digests with 0 qualifying notes returns 422
-- [ ] 2.5 GET /api/digests returns the digest list
+- [x] 2.1 TypeScript compiles: `npm run build`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 POST /api/digests with valid tag_id returns 201
+- [x] 2.4 POST /api/digests with 0 qualifying notes returns 422
+- [x] 2.5 GET /api/digests returns the digest list
 
 #### Manual
 
