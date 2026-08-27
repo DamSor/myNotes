@@ -129,15 +129,15 @@ None. Client-side `Array.filter` + `String.includes` on small data (<100 notes f
 
 #### Automated
 
-- [x] 1.1 Lint passes: `npm run lint`
-- [x] 1.2 Build succeeds: `npm run build`
-- [x] 1.3 No TypeScript errors in modified file
+- [x] 1.1 Lint passes: `npm run lint` — adf5e7e
+- [x] 1.2 Build succeeds: `npm run build` — adf5e7e
+- [x] 1.3 No TypeScript errors in modified file — adf5e7e
 
 #### Manual
 
-- [ ] 1.4 Search input appears between the form and tag chips with consistent styling
-- [ ] 1.5 Typing a substring filters notes instantly
-- [ ] 1.6 Search + tag filter work together (AND)
-- [ ] 1.7 Clearing search restores the full/tag-filtered list
-- [ ] 1.8 Empty state shows appropriate message
-- [ ] 1.9 Clear button (X) appears only when query is non-empty and works correctly
+- [x] 1.4 Search input appears between the form and tag chips with consistent styling — adf5e7e
+- [x] 1.5 Typing a substring filters notes instantly — adf5e7e
+- [x] 1.6 Search + tag filter work together (AND) — adf5e7e
+- [x] 1.7 Clearing search restores the full/tag-filtered list — adf5e7e
+- [x] 1.8 Empty state shows appropriate message — adf5e7e
+- [x] 1.9 Clear button (X) appears only when query is non-empty and works correctly — adf5e7e
