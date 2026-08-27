@@ -297,16 +297,16 @@ Add the "Generate digest" button to the tag filter bar on `/notes` and create th
 
 #### Automated
 
-- [x] 3.1 TypeScript compiles: `npm run build`
-- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.1 TypeScript compiles: `npm run build` — 183d3da
+- [x] 3.2 Linting passes: `npm run lint` — 183d3da
 
 #### Manual
 
-- [x] 3.3 "Generate digest" button appears only when a tag is selected
-- [x] 3.4 Click shows spinner then redirects to /ai with new digest
-- [x] 3.5 0-notes-since-last-digest shows error message
-- [x] 3.6 /ai page lists digests newest-first with tag labels
-- [x] 3.7 /ai empty state renders correctly
-- [x] 3.8 Nav links visible on /notes, /dashboard, and /ai with correct highlighting
-- [x] 3.9 LLM failure shows error + "Try again"
-- [x] 3.10 NFR: spinner appears within <2s of click
+- [x] 3.3 "Generate digest" button appears only when a tag is selected — 183d3da
+- [x] 3.4 Click shows spinner then redirects to /ai with new digest — 183d3da
+- [x] 3.5 0-notes-since-last-digest shows error message — 183d3da
+- [x] 3.6 /ai page lists digests newest-first with tag labels — 183d3da
+- [x] 3.7 /ai empty state renders correctly — 183d3da
+- [x] 3.8 Nav links visible on /notes, /dashboard, and /ai with correct highlighting — 183d3da
+- [x] 3.9 LLM failure shows error + "Try again" — 183d3da
+- [x] 3.10 NFR: spinner appears within <2s of click — 183d3da

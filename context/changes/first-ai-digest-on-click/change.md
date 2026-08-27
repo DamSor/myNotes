@@ -1,7 +1,7 @@
 ---
 change_id: first-ai-digest-on-click
 title: First AI digest on click
-status: implementing
+status: implemented
 created: 2026-08-27
 updated: 2026-08-27
 archived_at: null
