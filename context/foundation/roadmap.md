@@ -32,7 +32,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | F-01 | `notes-schema-and-rls`        | (foundation) schemat `notes` + `tags` + `note_tags` z RLS per-operacja wdrożony                       | —                      | Access Control, Guardrail#1 | done     |
 | F-02 | `llm-provider-contract`       | (foundation) integracja z OpenRouter + decyzja o training-opt-out zablokowana                         | —                      | Guardrail#3, OQ#3           | done |
 | S-01 | `capture-note-with-tag`       | user tworzy notatkę plain-text z tagami (typeahead) i widzi ją w płaskiej liście                      | F-01                   | FR-004, FR-005, FR-009, FR-010 | done |
-| S-02 | `first-ai-digest-on-click`    | user klika "Generuj digest" dla wybranego tagu i widzi digest AI w sekcji "AI dla mnie" (NORTH STAR)  | S-01, F-02             | FR-015, FR-016              | in-progress |
+| S-02 | `first-ai-digest-on-click`    | user klika "Generuj digest" dla wybranego tagu i widzi digest AI w sekcji "AI dla mnie" (NORTH STAR)  | S-01, F-02             | FR-015, FR-016              | done |
 | S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | done |
 | S-04 | `single-tag-filter`           | user filtruje listę notatek po pojedynczej etykiecie                                                  | S-01                   | FR-011                      | done |
 | S-05 | `text-search`                 | user wyszukuje notatki po fragmencie tekstu (case-insensitive, substring)                             | S-01                   | FR-020                      | done |
@@ -116,7 +116,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
   - Czy w MVP jeden model OpenRouter (np. GPT-4o-mini lub Claude Haiku) wystarcza dla wszystkich digestów, czy trzeba fallbacku? — Owner: developer. Block: no (dowolny domyślny wystarczy do walidacji hipotezy).
   - Kształt promptu enforce'ującego "grounded" — jaki minimalny zestaw sekcji ("tematy / decyzje / otwarte wątki / sprzeczności / brak materiału jeśli tak")? — Owner: developer. Block: no.
 - **Risk:** Ten slice **dowodzi lub podważa rdzeń produktu**. Jeśli AI produkuje bezużyteczne digesty, wszystkie downstream slice'y (S-03..S-08) tracą sens jako MVP. Zaakceptowane ryzyko `speed`: zaczynamy z pierwszym rozsądnym promptem i modelem, iterujemy tylko jeśli sygnał 70% akceptacji się nie broni. Ten slice tworzy tabelę `ai_content` (kolumny: id, user_id, source_tag_id nullable, kind enum('digest','weekly'), body text, created_at, updated_at) z RLS — progressive disclosure, nie w F-01.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-03: Edytuj notatkę inline i usuń z potwierdzeniem
 
@@ -241,3 +241,4 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **F-02: (foundation) integracja z OpenRouter wdrożona — `OPENROUTER_API_KEY` w produkcji (`wrangler secret put`) i w `.dev.vars`, thin wrapper `src/lib/services/llm.ts`, decyzja o training-opt-out zapisana w AGENTS.md.** — Archived 2026-08-26 → `context/archive/2026-08-26-llm-provider-contract/`. Lesson: —.
 - **S-04: user wybiera pojedynczą etykietę i lista notatek pokazuje tylko notatki oznaczone tym tagiem; wybór drugiego tagu zastępuje pierwszy (single-tag filter, nie multi-select).** — Archived 2026-08-27 → `context/archive/2026-08-27-single-tag-filter/`. Lesson: —.
 - **S-05: user wpisuje fragment tekstu w pole wyszukiwarki i lista notatek zawęża się do tych, których treść zawiera ten fragment; dopasowanie case-insensitive i substring (nie word-boundary).** — Archived 2026-08-27 → `context/archive/2026-08-27-text-search/`. Lesson: —.
+- **S-02: user w widoku listy filtrowanej po tagu (S-04 sequenced po tym — tu wystarczy prosty tag-selector) klika "Generuj digest" i po ≤ 2 s widocznego postępu (streaming lub spinner) dostaje nowy wpis typu "digest" w dedykowanej sekcji "AI dla mnie", oznaczony tagiem źródłowym, grounded w notatkach tego tagu od ostatniego digestu (lub od początku, jeśli pierwszy raz).** — Archived 2026-08-27 → `context/archive/2026-08-27-first-ai-digest-on-click/`. Lesson: —.

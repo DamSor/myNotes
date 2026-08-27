@@ -1,10 +1,10 @@
 ---
 change_id: first-ai-digest-on-click
 title: First AI digest on click
-status: impl_reviewed
+status: archived
 created: 2026-08-27
 updated: 2026-08-27
-archived_at: null
+archived_at: 2026-08-27T21:40:09Z
 ---
 
 ## Notes
