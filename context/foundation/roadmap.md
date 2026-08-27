@@ -32,7 +32,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | F-01 | `notes-schema-and-rls`        | (foundation) schemat `notes` + `tags` + `note_tags` z RLS per-operacja wdrożony                       | —                      | Access Control, Guardrail#1 | done     |
 | F-02 | `llm-provider-contract`       | (foundation) integracja z OpenRouter + decyzja o training-opt-out zablokowana                         | —                      | Guardrail#3, OQ#3           | done |
 | S-01 | `capture-note-with-tag`       | user tworzy notatkę plain-text z tagami (typeahead) i widzi ją w płaskiej liście                      | F-01                   | FR-004, FR-005, FR-009, FR-010 | done |
-| S-02 | `first-ai-digest-on-click`    | user klika "Generuj digest" dla wybranego tagu i widzi digest AI w sekcji "AI dla mnie" (NORTH STAR)  | S-01, F-02             | FR-015, FR-016              | proposed |
+| S-02 | `first-ai-digest-on-click`    | user klika "Generuj digest" dla wybranego tagu i widzi digest AI w sekcji "AI dla mnie" (NORTH STAR)  | S-01, F-02             | FR-015, FR-016              | in-progress |
 | S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | done |
 | S-04 | `single-tag-filter`           | user filtruje listę notatek po pojedynczej etykiecie                                                  | S-01                   | FR-011                      | done |
 | S-05 | `text-search`                 | user wyszukuje notatki po fragmencie tekstu (case-insensitive, substring)                             | S-01                   | FR-020                      | done |
@@ -116,7 +116,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
   - Czy w MVP jeden model OpenRouter (np. GPT-4o-mini lub Claude Haiku) wystarcza dla wszystkich digestów, czy trzeba fallbacku? — Owner: developer. Block: no (dowolny domyślny wystarczy do walidacji hipotezy).
   - Kształt promptu enforce'ującego "grounded" — jaki minimalny zestaw sekcji ("tematy / decyzje / otwarte wątki / sprzeczności / brak materiału jeśli tak")? — Owner: developer. Block: no.
 - **Risk:** Ten slice **dowodzi lub podważa rdzeń produktu**. Jeśli AI produkuje bezużyteczne digesty, wszystkie downstream slice'y (S-03..S-08) tracą sens jako MVP. Zaakceptowane ryzyko `speed`: zaczynamy z pierwszym rozsądnym promptem i modelem, iterujemy tylko jeśli sygnał 70% akceptacji się nie broni. Ten slice tworzy tabelę `ai_content` (kolumny: id, user_id, source_tag_id nullable, kind enum('digest','weekly'), body text, created_at, updated_at) z RLS — progressive disclosure, nie w F-01.
-- **Status:** proposed
+- **Status:** in-progress
 
 ### S-03: Edytuj notatkę inline i usuń z potwierdzeniem
 
