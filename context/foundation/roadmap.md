@@ -35,7 +35,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | S-02 | `first-ai-digest-on-click`    | user klika "Generuj digest" dla wybranego tagu i widzi digest AI w sekcji "AI dla mnie" (NORTH STAR)  | S-01, F-02             | FR-015, FR-016              | proposed |
 | S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | done |
 | S-04 | `single-tag-filter`           | user filtruje listę notatek po pojedynczej etykiecie                                                  | S-01                   | FR-011                      | done |
-| S-05 | `text-search`                 | user wyszukuje notatki po fragmencie tekstu (case-insensitive, substring)                             | S-01                   | FR-020                      | proposed |
+| S-05 | `text-search`                 | user wyszukuje notatki po fragmencie tekstu (case-insensitive, substring)                             | S-01                   | FR-020                      | in-progress |
 | S-06 | `edit-or-delete-digest`       | user edytuje digest inline lub usuwa go w sekcji "AI dla mnie" (sygnały 70% akceptacji)               | S-02                   | FR-017                      | proposed |
 | S-07 | `google-oauth-swap`           | user loguje się przez Google OAuth zamiast przez email+hasło i jawnie się wylogowuje                  | —                      | FR-001, FR-002, FR-003, Access Control | ready    |
 | S-08 | `weekly-summary-cron`         | user dostaje w niedzielny poranek cotygodniową notatkę AI, gdy w ostatnim tygodniu ma ≥3 notatki      | F-01, F-02, S-01       | US-01, FR-018, FR-019       | proposed |
@@ -153,7 +153,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **Unknowns:**
   - Czy MVP-scale (small users, small data) uzasadnia proste `ILIKE '%q%'`, czy dodać indeks pełnotekstowy (Postgres `tsvector`) od razu? — Owner: developer. Block: no (`ILIKE` jest deklarowany jako wystarczający w shape-notes `## Forward: tech-stack`).
 - **Risk:** Bez tego slice'u płaska lista rozsypie się po ~pierwszym tygodniu użycia (dokumentowany insight z Socratic FR-005 w PRD). Sekwencyjnie może być parallel z pozostałymi.
-- **Status:** proposed
+- **Status:** in-progress
 
 ### S-06: Edytuj lub usuń digest w "AI dla mnie"
 
