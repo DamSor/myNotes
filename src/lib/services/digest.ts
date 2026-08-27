@@ -1,8 +1,12 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { AiContent, AiContentWithTag } from "@/types";
-import { chatCompletion } from "@/lib/services/llm";
+import { chatCompletion, isLlmConfigured } from "@/lib/services/llm";
 
 const PROMPT_SIZE_LIMIT = 50_000;
+
+// Cap the note fetch so a heavily-used tag can't blow the Cloudflare Free 10ms CPU
+// budget (unbounded fetch + full-set iteration in truncateNotes). Newest N notes.
+const NOTE_FETCH_LIMIT = 200;
 
 const SYSTEM_PROMPT = `You are an assistant that creates structured digests from the user's personal notes.
 
@@ -73,7 +77,8 @@ async function fetchNotesSinceForTag(
     .select("id, content, created_at, note_tags!inner(tag_id)")
     .eq("user_id", userId)
     .eq("note_tags.tag_id", tagId)
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: false })
+    .limit(NOTE_FETCH_LIMIT);
 
   if (since) {
     query = query.gt("created_at", since);
@@ -84,7 +89,8 @@ async function fetchNotesSinceForTag(
   if (result.error) {
     throw new Error(`Failed to fetch notes for tag: ${result.error.message}`);
   }
-  return result.data;
+  // Fetched newest-first for the bound; reverse back to chronological for the prompt.
+  return (result.data as NoteRow[]).reverse();
 }
 
 function buildUserPrompt(notes: NoteRow[], truncatedCount: number): string {
@@ -119,11 +125,27 @@ function truncateNotes(notes: NoteRow[]): { kept: NoteRow[]; truncatedCount: num
     }
   }
 
+  // Guarantee at least the newest note survives — if it alone exceeds the limit,
+  // hard-truncate its content so the prompt is never empty.
+  if (kept.length === 0) {
+    const newest = notes[notes.length - 1];
+    kept.push({ ...newest, content: newest.content.slice(0, PROMPT_SIZE_LIMIT) });
+    return { kept, truncatedCount: notes.length - 1 };
+  }
+
   return { kept, truncatedCount: notes.length - kept.length };
 }
 
 export async function generateDigest(supabase: SupabaseClient, userId: string, tagId: string): Promise<AiContent> {
+  if (!isLlmConfigured()) {
+    throw new DigestError("AI is not configured. Set OPENROUTER_API_KEY to generate digests.", 503);
+  }
+
   const lastDigest = await fetchLastDigestForTag(supabase, userId, tagId);
+  // MVP limitation: the window watermark is the previous digest's created_at, which is
+  // set at INSERT (after the up-to-25s LLM call). Notes written during the
+  // fetch→LLM→insert window fall before that timestamp and are never re-digested.
+  // Accepted for MVP alongside "edited notes aren't re-digested". Follow-up: covered_until column.
   const since = lastDigest?.created_at ?? null;
 
   const allNotes = await fetchNotesSinceForTag(supabase, userId, tagId, since);

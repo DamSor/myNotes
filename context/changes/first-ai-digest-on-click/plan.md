@@ -260,6 +260,10 @@ Add the "Generate digest" button to the tag filter bar on `/notes` and create th
 - Notes service pattern: `src/lib/services/notes.ts`
 - Existing migration: `supabase/migrations/20260819205610_notes_tags_note_tags_schema_rls.sql`
 
+## Addenda
+
+- **2026-08-27 (impl-review F3)**: Phase 3 item 4 called for a `DigestList` skeleton loading variant. Dropped intentionally — `DigestList` is fully SSR-hydrated from `initialDigests` and never fetches client-side, so there is no loading state to skeleton. A skeleton would be dead code; the "Generating…" spinner lives on the trigger button in `NoteCapture` instead.
+
 ## Progress
 
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles. See `references/progress-format.md`.
