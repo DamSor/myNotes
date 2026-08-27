@@ -66,6 +66,28 @@ export interface CreateTagDTO {
   name: string;
 }
 
+// S-02 AI content entity: mirrors the ai_content table in
+// supabase/migrations/*_ai_content_table.sql (uuid -> string, timestamptz -> ISO string).
+export interface AiContent {
+  id: string;
+  user_id: string;
+  source_tag_id: string | null;
+  kind: "digest" | "weekly";
+  body: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// Extended shape for the /ai list: includes the source tag name for display.
+export interface AiContentWithTag extends AiContent {
+  tag_name: string | null;
+}
+
+// S-02 digest generation DTO: the client sends the tag_id to digest.
+export interface CreateDigestDTO {
+  tagId: string;
+}
+
 // F-02 LLM wrapper contract: prompt-agnostic chat completion shapes consumed by
 // S-02 (digest) and S-08 (weekly summary). The wrapper lives in src/lib/services/llm.ts.
 export interface LlmMessage {
