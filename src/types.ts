@@ -68,6 +68,7 @@ export interface CreateTagDTO {
 
 // S-02 AI content entity: mirrors the ai_content table in
 // supabase/migrations/*_ai_content_table.sql (uuid -> string, timestamptz -> ISO string).
+// S-06 adds deleted_at for soft-delete / 70% acceptance signals.
 export interface AiContent {
   id: string;
   user_id: string;
@@ -76,6 +77,7 @@ export interface AiContent {
   body: string;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
 }
 
 // Extended shape for the /ai list: includes the source tag name for display.
@@ -86,6 +88,17 @@ export interface AiContentWithTag extends AiContent {
 // S-02 digest generation DTO: the client sends the tag_id to digest.
 export interface CreateDigestDTO {
   tagId: string;
+}
+
+// S-06 update contract: body-only PATCH. Body is required (the only editable field)
+// and must be trimmed non-empty at the route layer.
+export interface UpdateAiContentDTO {
+  body: string;
+}
+
+// Update response: returns the updated row with tag name for display.
+export interface UpdateAiContentResponse {
+  aiContent: AiContentWithTag;
 }
 
 // F-02 LLM wrapper contract: prompt-agnostic chat completion shapes consumed by
