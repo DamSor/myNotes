@@ -294,12 +294,12 @@ Delete all files that became unreferenced after the OAuth swap — password-only
 
 #### Automated
 
-- [x] 2.1 Lint passes: `npm run lint`
-- [x] 2.2 Build succeeds: `npm run build`
-- [x] 2.3 No references to deleted files in src/
+- [x] 2.1 Lint passes: `npm run lint` — 722d345
+- [x] 2.2 Build succeeds: `npm run build` — 722d345
+- [x] 2.3 No references to deleted files in src/ — 722d345
 
 #### Manual
 
-- [x] 2.4 Full auth flow works end-to-end after cleanup
-- [x] 2.5 No broken links or 404s in the app
-- [x] 2.6 auth/ directory contains only ServerNotice.tsx, ServerError.tsx, and SubmitButton.tsx
+- [x] 2.4 Full auth flow works end-to-end after cleanup — 722d345
+- [x] 2.5 No broken links or 404s in the app — 722d345
+- [x] 2.6 auth/ directory contains only ServerNotice.tsx, ServerError.tsx, and SubmitButton.tsx — 722d345

@@ -1,7 +1,7 @@
 ---
 change_id: google-oauth-swap
 title: Google oauth swap
-status: implementing
+status: implemented
 created: 2026-08-30
 updated: 2026-08-30
 archived_at: null
