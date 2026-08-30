@@ -319,16 +319,16 @@ MVP scale is small. Edit touches one row (`UPDATE body`); soft-delete touches on
 
 #### Automated
 
-- [x] 3.1 TypeScript compiles: `npm run build`
-- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.1 TypeScript compiles: `npm run build` — 1ab6f8f
+- [x] 3.2 Linting passes: `npm run lint` — 1ab6f8f
 
 #### Manual
 
-- [x] 3.3 Each digest card shows Edit + Delete controls; list unchanged at rest
-- [x] 3.4 Edit opens textarea seeded with body; Save disabled when content blank
-- [x] 3.5 Editing body and saving replaces card in place; "edited" indicator appears
-- [x] 3.6 Cancel discards changes and returns to view mode
-- [x] 3.7 Delete opens AlertDialog; confirm removes card instantly; gone after reload; DB row has `deleted_at` set
-- [x] 3.8 "Edited" indicator only on digests where `updated_at > created_at`
-- [x] 3.9 Empty state renders when all digests deleted
-- [x] 3.10 Signed-out `/ai` redirects; second user cannot edit/delete first user's digests (404)
+- [x] 3.3 Each digest card shows Edit + Delete controls; list unchanged at rest — 1ab6f8f
+- [x] 3.4 Edit opens textarea seeded with body; Save disabled when content blank — 1ab6f8f
+- [x] 3.5 Editing body and saving replaces card in place; "edited" indicator appears — 1ab6f8f
+- [x] 3.6 Cancel discards changes and returns to view mode — 1ab6f8f
+- [x] 3.7 Delete opens AlertDialog; confirm removes card instantly; gone after reload; DB row has `deleted_at` set — 1ab6f8f
+- [x] 3.8 "Edited" indicator only on digests where `updated_at > created_at` — 1ab6f8f
+- [x] 3.9 Empty state renders when all digests deleted — 1ab6f8f
+- [x] 3.10 Signed-out `/ai` redirects; second user cannot edit/delete first user's digests (404) — 1ab6f8f

@@ -1,7 +1,7 @@
 ---
 change_id: edit-or-delete-digest
 title: Edit or delete digest
-status: implementing
+status: implemented
 created: 2026-08-30
 updated: 2026-08-30
 archived_at: null
