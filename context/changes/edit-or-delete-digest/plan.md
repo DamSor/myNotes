@@ -290,30 +290,30 @@ MVP scale is small. Edit touches one row (`UPDATE body`); soft-delete touches on
 
 #### Automated
 
-- [x] 1.1 Migration applies cleanly: `npx supabase db push`
-- [x] 1.2 TypeScript compiles: `npm run build`
-- [x] 1.3 Linting passes: `npm run lint`
+- [x] 1.1 Migration applies cleanly: `npx supabase db push` — 0b371c3
+- [x] 1.2 TypeScript compiles: `npm run build` — 0b371c3
+- [x] 1.3 Linting passes: `npm run lint` — 0b371c3
 
 #### Manual
 
-- [x] 1.4 Verify `deleted_at` column exists (nullable, timestamptz) and existing digests have `deleted_at = NULL`
+- [x] 1.4 Verify `deleted_at` column exists (nullable, timestamptz) and existing digests have `deleted_at = NULL` — 0b371c3
 
 ### Phase 2: Service + API
 
 #### Automated
 
-- [ ] 2.1 TypeScript compiles: `npm run build`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Route exports `const prerender = false`
+- [x] 2.1 TypeScript compiles: `npm run build`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Route exports `const prerender = false`
 
 #### Manual
 
-- [ ] 2.4 PATCH body-only returns 200 with updated body and bumped `updated_at`
-- [ ] 2.5 PATCH empty/whitespace body returns 400
-- [ ] 2.6 PATCH/DELETE on another user's ai_content returns 404
-- [ ] 2.7 DELETE returns 200 `{ id }`; digest gone from GET /api/digests; row persists in DB with `deleted_at` set
-- [ ] 2.8 DELETE on already-deleted item returns 404
-- [ ] 2.9 Unauthenticated PATCH/DELETE returns 401
+- [x] 2.4 PATCH body-only returns 200 with updated body and bumped `updated_at`
+- [x] 2.5 PATCH empty/whitespace body returns 400
+- [x] 2.6 PATCH/DELETE on another user's ai_content returns 404
+- [x] 2.7 DELETE returns 200 `{ id }`; digest gone from GET /api/digests; row persists in DB with `deleted_at` set
+- [x] 2.8 DELETE on already-deleted item returns 404
+- [x] 2.9 Unauthenticated PATCH/DELETE returns 401
 
 ### Phase 3: Frontend
 

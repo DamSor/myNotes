@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { AiContent, AiContentWithTag } from "@/types";
+import type { AiContent, AiContentWithTag, UpdateAiContentDTO } from "@/types";
 import { chatCompletion, isLlmConfigured } from "@/lib/services/llm";
 
 const PROMPT_SIZE_LIMIT = 50_000;
@@ -185,20 +185,101 @@ interface AiContentJoinRow extends AiContent {
   tags: { name: string } | null;
 }
 
+const AI_CONTENT_WITH_TAG_SELECT = "*, tags:source_tag_id(name)";
+
+function flattenAiContentRow(row: AiContentJoinRow): AiContentWithTag {
+  const { tags: joinedTag, ...rest } = row;
+  return { ...rest, tag_name: joinedTag?.name ?? null };
+}
+
+async function readAiContentWithTag(
+  supabase: SupabaseClient,
+  userId: string,
+  id: string,
+): Promise<AiContentWithTag | null> {
+  const result = await supabase
+    .from("ai_content")
+    .select(AI_CONTENT_WITH_TAG_SELECT)
+    .eq("id", id)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (result.error) {
+    throw new Error(`Failed to read ai_content: ${result.error.message}`);
+  }
+  if (!result.data) {
+    return null;
+  }
+  return flattenAiContentRow(result.data as AiContentJoinRow);
+}
+
 export async function listDigests(supabase: SupabaseClient, userId: string): Promise<AiContentWithTag[]> {
   const result = await supabase
     .from("ai_content")
-    .select("*, tags:source_tag_id(name)")
+    .select(AI_CONTENT_WITH_TAG_SELECT)
     .eq("user_id", userId)
     .eq("kind", "digest")
+    .is("deleted_at", null)
     .order("created_at", { ascending: false });
 
   if (result.error) {
     throw new Error(`Failed to list digests: ${result.error.message}`);
   }
 
-  return (result.data as unknown as AiContentJoinRow[]).map((row) => {
-    const { tags: joinedTag, ...rest } = row;
-    return { ...rest, tag_name: joinedTag?.name ?? null };
-  });
+  return (result.data as unknown as AiContentJoinRow[]).map(flattenAiContentRow);
+}
+
+// Body-only update for any ai_content row the user owns. Ownership is gated with a
+// leading SELECT (id + user_id + not soft-deleted) so missing/foreign/deleted ids
+// all return null for the route to map to 404. updated_at is left to the trigger.
+export async function updateAiContent(
+  supabase: SupabaseClient,
+  userId: string,
+  id: string,
+  { body }: UpdateAiContentDTO,
+): Promise<AiContentWithTag | null> {
+  const owned = await supabase
+    .from("ai_content")
+    .select("id")
+    .eq("id", id)
+    .eq("user_id", userId)
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  if (owned.error) {
+    throw new Error(`Failed to load ai_content: ${owned.error.message}`);
+  }
+  if (!owned.data) {
+    return null;
+  }
+
+  const { error } = await supabase.from("ai_content").update({ body }).eq("id", id).eq("user_id", userId);
+  if (error) {
+    throw new Error(`Failed to update ai_content: ${error.message}`);
+  }
+
+  const updated = await readAiContentWithTag(supabase, userId, id);
+  if (!updated) {
+    throw new Error("Failed to re-read ai_content: no row returned");
+  }
+  return updated;
+}
+
+// Soft-delete any ai_content row the user owns by setting deleted_at. Already-deleted
+// or non-owned rows affect 0 rows so the route can map to 404. The set_updated_at
+// trigger also fires; deleted rows are filtered from list queries so this is invisible.
+export async function softDeleteAiContent(supabase: SupabaseClient, userId: string, id: string): Promise<boolean> {
+  const { data, error } = await supabase
+    .from("ai_content")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("user_id", userId)
+    .is("deleted_at", null)
+    .select("id");
+
+  if (error) {
+    throw new Error(`Failed to delete ai_content: ${error.message}`);
+  }
+
+  return data.length > 0;
 }
