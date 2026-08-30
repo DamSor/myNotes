@@ -1,10 +1,10 @@
 ---
 change_id: edit-or-delete-digest
 title: Edit or delete digest
-status: impl_reviewed
+status: archived
 created: 2026-08-30
 updated: 2026-08-30
-archived_at: null
+archived_at: 2026-08-30T16:23:39Z
 ---
 
 ## Notes

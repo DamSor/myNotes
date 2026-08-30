@@ -36,7 +36,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | S-03 | `inline-edit-and-delete-note` | user edytuje notatkę inline w liście i usuwa ją po potwierdzeniu w dialogu                            | S-01                   | FR-006, FR-007, FR-008      | done |
 | S-04 | `single-tag-filter`           | user filtruje listę notatek po pojedynczej etykiecie                                                  | S-01                   | FR-011                      | done |
 | S-05 | `text-search`                 | user wyszukuje notatki po fragmencie tekstu (case-insensitive, substring)                             | S-01                   | FR-020                      | done |
-| S-06 | `edit-or-delete-digest`       | user edytuje digest inline lub usuwa go w sekcji "AI dla mnie" (sygnały 70% akceptacji)               | S-02                   | FR-017                      | in-progress |
+| S-06 | `edit-or-delete-digest`       | user edytuje digest inline lub usuwa go w sekcji "AI dla mnie" (sygnały 70% akceptacji)               | S-02                   | FR-017                      | done |
 | S-07 | `google-oauth-swap`           | user loguje się przez Google OAuth zamiast przez email+hasło i jawnie się wylogowuje                  | —                      | FR-001, FR-002, FR-003, Access Control | ready    |
 | S-08 | `weekly-summary-cron`         | user dostaje w niedzielny poranek cotygodniową notatkę AI, gdy w ostatnim tygodniu ma ≥3 notatki      | F-01, F-02, S-01       | US-01, FR-018, FR-019       | proposed |
 
@@ -166,7 +166,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **Unknowns:**
   - Definicja "edycji" w metryce Primary 70% — czy każda edycja (poprawka literówki vs. rewrite całości) to ten sam sygnał? Czy implicit accept ma okno czasowe (np. 30 dni)? — Owner: user (metric design). Block: no (jakakolwiek rozsądna definicja zadziała w MVP; udokumentować w AGENTS.md przy implementacji).
 - **Risk:** Tabela `ai_content` już istnieje z S-02 — ten slice dodaje event-log lub kolumny `status`/`edited_at`/`deleted_at` do policzenia sygnału 70%. Ryzyko: policzenie 70% za mały N (przy 1 userze × ~10 digestów w 3 tyg) — metryka będzie szumowa; zaakceptowane pod speed.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-07: Zaloguj przez Google OAuth (swap z email+hasła)
 
@@ -242,3 +242,4 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **S-04: user wybiera pojedynczą etykietę i lista notatek pokazuje tylko notatki oznaczone tym tagiem; wybór drugiego tagu zastępuje pierwszy (single-tag filter, nie multi-select).** — Archived 2026-08-27 → `context/archive/2026-08-27-single-tag-filter/`. Lesson: —.
 - **S-05: user wpisuje fragment tekstu w pole wyszukiwarki i lista notatek zawęża się do tych, których treść zawiera ten fragment; dopasowanie case-insensitive i substring (nie word-boundary).** — Archived 2026-08-27 → `context/archive/2026-08-27-text-search/`. Lesson: —.
 - **S-02: user w widoku listy filtrowanej po tagu (S-04 sequenced po tym — tu wystarczy prosty tag-selector) klika "Generuj digest" i po ≤ 2 s widocznego postępu (streaming lub spinner) dostaje nowy wpis typu "digest" w dedykowanej sekcji "AI dla mnie", oznaczony tagiem źródłowym, grounded w notatkach tego tagu od ostatniego digestu (lub od początku, jeśli pierwszy raz).** — Archived 2026-08-27 → `context/archive/2026-08-27-first-ai-digest-on-click/`. Lesson: —.
+- **S-06: user edytuje digest inline lub usuwa go w sekcji "AI dla mnie" (sygnały 70% akceptacji)** — Archived 2026-08-30 → `context/archive/2026-08-30-edit-or-delete-digest/`. Lesson: —.
