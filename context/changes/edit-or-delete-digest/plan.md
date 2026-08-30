@@ -302,33 +302,33 @@ MVP scale is small. Edit touches one row (`UPDATE body`); soft-delete touches on
 
 #### Automated
 
-- [x] 2.1 TypeScript compiles: `npm run build`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Route exports `const prerender = false`
+- [x] 2.1 TypeScript compiles: `npm run build` — e5566b3
+- [x] 2.2 Linting passes: `npm run lint` — e5566b3
+- [x] 2.3 Route exports `const prerender = false` — e5566b3
 
 #### Manual
 
-- [x] 2.4 PATCH body-only returns 200 with updated body and bumped `updated_at`
-- [x] 2.5 PATCH empty/whitespace body returns 400
-- [x] 2.6 PATCH/DELETE on another user's ai_content returns 404
-- [x] 2.7 DELETE returns 200 `{ id }`; digest gone from GET /api/digests; row persists in DB with `deleted_at` set
-- [x] 2.8 DELETE on already-deleted item returns 404
-- [x] 2.9 Unauthenticated PATCH/DELETE returns 401
+- [x] 2.4 PATCH body-only returns 200 with updated body and bumped `updated_at` — e5566b3
+- [x] 2.5 PATCH empty/whitespace body returns 400 — e5566b3
+- [x] 2.6 PATCH/DELETE on another user's ai_content returns 404 — e5566b3
+- [x] 2.7 DELETE returns 200 `{ id }`; digest gone from GET /api/digests; row persists in DB with `deleted_at` set — e5566b3
+- [x] 2.8 DELETE on already-deleted item returns 404 — e5566b3
+- [x] 2.9 Unauthenticated PATCH/DELETE returns 401 — e5566b3
 
 ### Phase 3: Frontend
 
 #### Automated
 
-- [ ] 3.1 TypeScript compiles: `npm run build`
-- [ ] 3.2 Linting passes: `npm run lint`
+- [x] 3.1 TypeScript compiles: `npm run build`
+- [x] 3.2 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 Each digest card shows Edit + Delete controls; list unchanged at rest
-- [ ] 3.4 Edit opens textarea seeded with body; Save disabled when content blank
-- [ ] 3.5 Editing body and saving replaces card in place; "edited" indicator appears
-- [ ] 3.6 Cancel discards changes and returns to view mode
-- [ ] 3.7 Delete opens AlertDialog; confirm removes card instantly; gone after reload; DB row has `deleted_at` set
-- [ ] 3.8 "Edited" indicator only on digests where `updated_at > created_at`
-- [ ] 3.9 Empty state renders when all digests deleted
-- [ ] 3.10 Signed-out `/ai` redirects; second user cannot edit/delete first user's digests (404)
+- [x] 3.3 Each digest card shows Edit + Delete controls; list unchanged at rest
+- [x] 3.4 Edit opens textarea seeded with body; Save disabled when content blank
+- [x] 3.5 Editing body and saving replaces card in place; "edited" indicator appears
+- [x] 3.6 Cancel discards changes and returns to view mode
+- [x] 3.7 Delete opens AlertDialog; confirm removes card instantly; gone after reload; DB row has `deleted_at` set
+- [x] 3.8 "Edited" indicator only on digests where `updated_at > created_at`
+- [x] 3.9 Empty state renders when all digests deleted
+- [x] 3.10 Signed-out `/ai` redirects; second user cannot edit/delete first user's digests (404)

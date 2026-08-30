@@ -1,15 +1,6 @@
 import { useCallback, useState } from "react";
+import { readApiError } from "@/lib/api-client";
 import type { CreateNoteResponse, NoteWithTags, Tag, UpdateNoteDTO, UpdateNoteResponse } from "@/types";
-
-async function readApiError(res: Response, fallback: string): Promise<string> {
-  try {
-    const body = (await res.json()) as { error?: string };
-    if (body.error) return body.error;
-  } catch {
-    // Non-JSON error body; keep the default message.
-  }
-  return fallback;
-}
 
 function mergeTags(prev: Tag[], incoming: Tag[]): Tag[] {
   const byId = new Map(prev.map((tag) => [tag.id, tag]));
