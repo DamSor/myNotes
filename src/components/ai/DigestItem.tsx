@@ -13,22 +13,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { ServerError } from "@/components/auth/ServerError";
+import { formatDate } from "@/lib/utils";
 import type { AiContentWithTag } from "@/types";
 
 interface DigestItemProps {
   digest: AiContentWithTag;
   onUpdate: (id: string, body: string) => Promise<AiContentWithTag>;
   onDelete: (id: string) => Promise<void>;
-}
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 }
 
 export function DigestItem({ digest, onUpdate, onDelete }: DigestItemProps) {
@@ -141,7 +132,7 @@ export function DigestItem({ digest, onUpdate, onDelete }: DigestItemProps) {
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete this digest?</AlertDialogTitle>
-                  <AlertDialogDescription>This can&apos;t be undone.</AlertDialogDescription>
+                  <AlertDialogDescription>This will remove the digest from your list.</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
@@ -201,6 +192,7 @@ export function DigestItem({ digest, onUpdate, onDelete }: DigestItemProps) {
         </form>
       ) : (
         <>
+          {/* Body is LLM-sourced — render as text only. Do NOT use dangerouslySetInnerHTML or an unsanitized markdown renderer. */}
           <div className="prose-invert prose-sm max-w-none text-sm leading-relaxed whitespace-pre-wrap text-blue-100/80">
             {digest.body}
           </div>

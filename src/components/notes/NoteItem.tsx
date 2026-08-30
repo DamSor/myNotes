@@ -15,7 +15,7 @@ import {
 import { ServerError } from "@/components/auth/ServerError";
 import { ServerNotice } from "@/components/auth/ServerNotice";
 import { TagInput } from "@/components/notes/TagInput";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import type { NoteWithTags, Tag, UpdateNoteDTO, UpdateNoteResponse } from "@/types";
 
 interface NoteItemProps {
@@ -24,13 +24,6 @@ interface NoteItemProps {
   onUpdate: (noteId: string, patch: UpdateNoteDTO) => Promise<UpdateNoteResponse>;
   onDelete: (noteId: string) => Promise<void>;
   onTagClick?: (tagId: string) => void;
-}
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
 }
 
 function sameTagNames(a: string[], b: string[]): boolean {
