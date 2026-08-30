@@ -1,19 +1,48 @@
 import type { APIRoute } from "astro";
+import { oauthUserMessage } from "@/lib/oauth-error";
 import { createClient } from "@/lib/supabase";
 
 export const prerender = false;
 
+/** Hash fragments never reach the server. Render this so the browser can lift `#error=` into `?error=`. */
+const HASH_ERROR_BRIDGE = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Signing in…</title>
+    <script>
+      (function () {
+        var params = new URLSearchParams(location.hash.replace(/^#/, ""));
+        var code = params.get("error");
+        var description = params.get("error_description");
+        var message =
+          code === "access_denied" || description === "access_denied"
+            ? "Google sign-in was cancelled."
+            : description || code;
+        var target = message
+          ? "/auth/signin?error=" + encodeURIComponent(message)
+          : "/auth/signin?error=" + encodeURIComponent("Missing authorization code");
+        location.replace(target);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>`;
+
 export const GET: APIRoute = async (context) => {
-  const oauthError = context.url.searchParams.get("error");
-  const oauthErrorDescription = context.url.searchParams.get("error_description");
+  const oauthError = context.url.searchParams.get("error")?.trim();
+  const oauthErrorDescription = context.url.searchParams.get("error_description")?.trim();
   if (oauthError) {
-    const message = oauthErrorDescription ?? oauthError;
+    const message = oauthUserMessage(oauthError, oauthErrorDescription) ?? "Sign-in failed";
     return context.redirect(`/auth/signin?error=${encodeURIComponent(message)}`);
   }
 
   const code = context.url.searchParams.get("code");
   if (!code) {
-    return context.redirect(`/auth/signin?error=${encodeURIComponent("Missing authorization code")}`);
+    return new Response(HASH_ERROR_BRIDGE, {
+      status: 200,
+      headers: { "content-type": "text/html; charset=utf-8" },
+    });
   }
 
   const supabase = createClient(context.request.headers, context.cookies);

@@ -1,7 +1,8 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { oauthUserMessage } from "@/lib/oauth-error";
 
-const error = Astro.url.searchParams.get("error");
+const error = oauthUserMessage(Astro.url.searchParams.get("error"));
 ---
 
 <Layout title="Sign in">
@@ -46,3 +47,19 @@ const error = Astro.url.searchParams.get("error");
     </div>
   </div>
 </Layout>
+
+<script is:inline>
+  (function () {
+    var params = new URLSearchParams(location.hash.replace(/^#/, ""));
+    var code = params.get("error");
+    var description = params.get("error_description");
+    var message =
+      code === "access_denied" || description === "access_denied"
+        ? "Google sign-in was cancelled."
+        : description || code;
+    var existing = new URLSearchParams(location.search).get("error");
+    if (message && !existing) {
+      location.replace("/auth/signin?error=" + encodeURIComponent(message));
+    }
+  })();
+</script>

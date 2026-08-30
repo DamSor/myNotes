@@ -274,32 +274,32 @@ Delete all files that became unreferenced after the OAuth swap — password-only
 
 #### Automated
 
-- [x] 1.1 Lint passes: `npm run lint`
-- [x] 1.2 Build succeeds: `npm run build`
-- [x] 1.3 No TypeScript errors referencing deleted imports
+- [x] 1.1 Lint passes: `npm run lint` — f0dc6cc
+- [x] 1.2 Build succeeds: `npm run build` — f0dc6cc
+- [x] 1.3 No TypeScript errors referencing deleted imports — f0dc6cc
 
 #### Manual
 
-- [x] 1.4 "Sign in with Google" redirects to Google consent screen
-- [x] 1.5 After consent, user lands on /notes with valid session
-- [x] 1.6 Astro.locals.user is populated with the Google-linked identity
-- [x] 1.7 Root / redirects to /notes when authenticated
-- [x] 1.8 Root / redirects to /auth/signin when not authenticated
-- [x] 1.9 /notes when not authenticated redirects to /auth/signin
-- [x] 1.10 Server errors from OAuth display on signin page
-- [x] 1.11 Sign-out works and redirects properly
-- [x] 1.12 Existing user auto-links to Google identity
+- [x] 1.4 "Sign in with Google" redirects to Google consent screen — f0dc6cc
+- [x] 1.5 After consent, user lands on /notes with valid session — f0dc6cc
+- [x] 1.6 Astro.locals.user is populated with the Google-linked identity — f0dc6cc
+- [x] 1.7 Root / redirects to /notes when authenticated — f0dc6cc
+- [x] 1.8 Root / redirects to /auth/signin when not authenticated — f0dc6cc
+- [x] 1.9 /notes when not authenticated redirects to /auth/signin — f0dc6cc
+- [x] 1.10 Server errors from OAuth display on signin page — f0dc6cc
+- [x] 1.11 Sign-out works and redirects properly — f0dc6cc
+- [x] 1.12 Existing user auto-links to Google identity — f0dc6cc
 
 ### Phase 2: Dead Code Cleanup
 
 #### Automated
 
-- [ ] 2.1 Lint passes: `npm run lint`
-- [ ] 2.2 Build succeeds: `npm run build`
-- [ ] 2.3 No references to deleted files in src/
+- [x] 2.1 Lint passes: `npm run lint`
+- [x] 2.2 Build succeeds: `npm run build`
+- [x] 2.3 No references to deleted files in src/
 
 #### Manual
 
-- [ ] 2.4 Full auth flow works end-to-end after cleanup
-- [ ] 2.5 No broken links or 404s in the app
-- [ ] 2.6 auth/ directory contains only ServerNotice.tsx, ServerError.tsx, and SubmitButton.tsx
+- [x] 2.4 Full auth flow works end-to-end after cleanup
+- [x] 2.5 No broken links or 404s in the app
+- [x] 2.6 auth/ directory contains only ServerNotice.tsx, ServerError.tsx, and SubmitButton.tsx
