@@ -266,29 +266,29 @@ Delete all files that became unreferenced after the OAuth swap — password-only
 
 #### Manual
 
-- [x] 0.1 Google Cloud OAuth client created with correct redirect URI
-- [x] 0.2 Supabase Google provider enabled with credentials
-- [x] 0.3 Supabase redirect URLs include localhost and production wildcards
+- [x] 0.1 Google Cloud OAuth client created with correct redirect URI — 9a9e2c5
+- [x] 0.2 Supabase Google provider enabled with credentials — 9a9e2c5
+- [x] 0.3 Supabase redirect URLs include localhost and production wildcards — 9a9e2c5
 
 ### Phase 1: OAuth Flow Implementation
 
 #### Automated
 
-- [ ] 1.1 Lint passes: `npm run lint`
-- [ ] 1.2 Build succeeds: `npm run build`
-- [ ] 1.3 No TypeScript errors referencing deleted imports
+- [x] 1.1 Lint passes: `npm run lint`
+- [x] 1.2 Build succeeds: `npm run build`
+- [x] 1.3 No TypeScript errors referencing deleted imports
 
 #### Manual
 
-- [ ] 1.4 "Sign in with Google" redirects to Google consent screen
-- [ ] 1.5 After consent, user lands on /notes with valid session
-- [ ] 1.6 Astro.locals.user is populated with the Google-linked identity
-- [ ] 1.7 Root / redirects to /notes when authenticated
-- [ ] 1.8 Root / redirects to /auth/signin when not authenticated
-- [ ] 1.9 /notes when not authenticated redirects to /auth/signin
-- [ ] 1.10 Server errors from OAuth display on signin page
-- [ ] 1.11 Sign-out works and redirects properly
-- [ ] 1.12 Existing user auto-links to Google identity
+- [x] 1.4 "Sign in with Google" redirects to Google consent screen
+- [x] 1.5 After consent, user lands on /notes with valid session
+- [x] 1.6 Astro.locals.user is populated with the Google-linked identity
+- [x] 1.7 Root / redirects to /notes when authenticated
+- [x] 1.8 Root / redirects to /auth/signin when not authenticated
+- [x] 1.9 /notes when not authenticated redirects to /auth/signin
+- [x] 1.10 Server errors from OAuth display on signin page
+- [x] 1.11 Sign-out works and redirects properly
+- [x] 1.12 Existing user auto-links to Google identity
 
 ### Phase 2: Dead Code Cleanup
 
