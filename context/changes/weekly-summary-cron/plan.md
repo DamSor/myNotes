@@ -391,27 +391,27 @@ Update the `/ai` page to display all `ai_content` kinds (digest, weekly, weekly-
 
 #### Automated
 
-- [x] 1.1 Build passes: `npm run build`
-- [x] 1.2 Lint passes: `npm run lint`
-- [x] 1.3 Dev server starts: `npm run dev`
-- [x] 1.4 Migration applies cleanly
+- [x] 1.1 Build passes: `npm run build` — e92ebdd
+- [x] 1.2 Lint passes: `npm run lint` — e92ebdd
+- [x] 1.3 Dev server starts: `npm run dev` — e92ebdd
+- [x] 1.4 Migration applies cleanly — e92ebdd
 
 #### Manual
 
-- [x] 1.5 Scheduled endpoint fires heartbeat log
-- [x] 1.6 Existing /ai page works (no regression)
-- [x] 1.7 Existing digest generation works
+- [x] 1.5 Scheduled endpoint fires heartbeat log — e92ebdd
+- [x] 1.6 Existing /ai page works (no regression) — e92ebdd
+- [x] 1.7 Existing digest generation works — e92ebdd
 
 ### Phase 2: Weekly Summary Service
 
 #### Automated
 
-- [ ] 2.1 Build passes: `npm run build`
-- [ ] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Build passes: `npm run build`
+- [x] 2.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.3 Phase 3 wires for end-to-end verification
+- [x] 2.3 Phase 3 wires for end-to-end verification
 
 ### Phase 3: Scheduled Handler Orchestration
 

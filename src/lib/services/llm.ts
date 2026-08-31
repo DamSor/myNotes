@@ -18,8 +18,8 @@ interface OpenRouterChatResponse {
   };
 }
 
-export function isLlmConfigured(): boolean {
-  return Boolean(OPENROUTER_API_KEY);
+export function isLlmConfigured(apiKey?: string): boolean {
+  return Boolean(apiKey ?? OPENROUTER_API_KEY);
 }
 
 export class LlmNotConfiguredError extends Error {
@@ -73,7 +73,8 @@ function completionUsage(payload: OpenRouterChatResponse): LlmCompletion["usage"
 }
 
 export async function chatCompletion(messages: LlmMessage[], opts?: LlmCompletionOptions): Promise<LlmCompletion> {
-  if (!OPENROUTER_API_KEY) {
+  const resolvedKey = opts?.apiKey ?? OPENROUTER_API_KEY;
+  if (!resolvedKey) {
     throw new LlmNotConfiguredError();
   }
   if (messages.length === 0) {
@@ -108,7 +109,7 @@ export async function chatCompletion(messages: LlmMessage[], opts?: LlmCompletio
     res = await fetch(OPENROUTER_CHAT_URL, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+        Authorization: `Bearer ${resolvedKey}`,
         "Content-Type": "application/json",
         "HTTP-Referer": OPENROUTER_HTTP_REFERER,
         "X-Title": OPENROUTER_APP_TITLE,

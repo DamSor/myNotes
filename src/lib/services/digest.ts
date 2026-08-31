@@ -29,7 +29,7 @@ Questions, unresolved topics, or threads that need follow-up.
 ## Sprzeczności
 Contradictions or tensions between different notes (if any).`;
 
-interface NoteRow {
+export interface NoteRow {
   id: string;
   content: string;
   created_at: string;
@@ -93,7 +93,7 @@ async function fetchNotesSinceForTag(
   return (result.data as NoteRow[]).reverse();
 }
 
-function buildUserPrompt(notes: NoteRow[], truncatedCount: number): string {
+export function buildUserPrompt(notes: NoteRow[], truncatedCount: number): string {
   const header =
     truncatedCount > 0
       ? `Note: ${truncatedCount} oldest note(s) were omitted because total content exceeded the size limit.\n\n`
@@ -104,7 +104,7 @@ function buildUserPrompt(notes: NoteRow[], truncatedCount: number): string {
   return `${header}${noteBodies}`;
 }
 
-function truncateNotes(notes: NoteRow[]): { kept: NoteRow[]; truncatedCount: number } {
+export function truncateNotes(notes: NoteRow[]): { kept: NoteRow[]; truncatedCount: number } {
   let totalChars = 0;
   for (const n of notes) {
     totalChars += n.content.length;

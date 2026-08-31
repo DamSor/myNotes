@@ -112,6 +112,7 @@ export interface LlmCompletionOptions {
   model?: string;
   temperature?: number;
   maxTokens?: number;
+  apiKey?: string;
 }
 
 export interface LlmCompletion {
