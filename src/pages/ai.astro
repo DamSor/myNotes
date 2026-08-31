@@ -2,7 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import DigestList from "@/components/ai/DigestList";
 import { createClient } from "@/lib/supabase";
-import { listDigests } from "@/lib/services/digest";
+import { listAllAiContent } from "@/lib/services/digest";
 import type { AiContentWithTag } from "@/types";
 
 const { user } = Astro.locals;
@@ -10,7 +10,7 @@ const supabase = createClient(Astro.request.headers, Astro.cookies);
 
 let initialDigests: AiContentWithTag[] = [];
 if (supabase && user) {
-  initialDigests = await listDigests(supabase, user.id);
+  initialDigests = await listAllAiContent(supabase, user.id);
 }
 ---
 

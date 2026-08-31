@@ -229,6 +229,21 @@ export async function listDigests(supabase: SupabaseClient, userId: string): Pro
   return (result.data as unknown as AiContentJoinRow[]).map(flattenAiContentRow);
 }
 
+export async function listAllAiContent(supabase: SupabaseClient, userId: string): Promise<AiContentWithTag[]> {
+  const result = await supabase
+    .from("ai_content")
+    .select(AI_CONTENT_WITH_TAG_SELECT)
+    .eq("user_id", userId)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false });
+
+  if (result.error) {
+    throw new Error(`Failed to list ai content: ${result.error.message}`);
+  }
+
+  return (result.data as unknown as AiContentJoinRow[]).map(flattenAiContentRow);
+}
+
 // Body-only update for any ai_content row the user owns. Ownership is gated with a
 // leading SELECT (id + user_id + not soft-deleted) so missing/foreign/deleted ids
 // all return null for the route to map to 404. updated_at is left to the trigger.

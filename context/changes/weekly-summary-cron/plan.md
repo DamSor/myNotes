@@ -417,27 +417,27 @@ Update the `/ai` page to display all `ai_content` kinds (digest, weekly, weekly-
 
 #### Automated
 
-- [x] 3.1 Build passes: `npm run build`
-- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Build passes: `npm run build` — 0dd1764
+- [x] 3.2 Lint passes: `npm run lint` — 0dd1764
 
 #### Manual
 
-- [x] 3.3 Weekly summary generated for eligible user (≥3 notes)
-- [x] 3.4 No entry for ineligible user (<3 notes)
-- [x] 3.5 Idempotency: duplicate run skips existing summary
-- [x] 3.6 Failed generation produces kind='weekly-failed' entry
+- [x] 3.3 Weekly summary generated for eligible user (≥3 notes) — 0dd1764
+- [x] 3.4 No entry for ineligible user (<3 notes) — 0dd1764
+- [x] 3.5 Idempotency: duplicate run skips existing summary — 0dd1764
+- [x] 3.6 Failed generation produces kind='weekly-failed' entry — 0dd1764
 
 ### Phase 4: UI Updates
 
 #### Automated
 
-- [ ] 4.1 Build passes: `npm run build`
-- [ ] 4.2 Lint passes: `npm run lint`
+- [x] 4.1 Build passes: `npm run build`
+- [x] 4.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 4.3 Weekly summaries show with "Weekly" badge
-- [ ] 4.4 Weekly-failed entries show warning style
-- [ ] 4.5 Weekly-failed entries: no edit button, delete works
-- [ ] 4.6 Weekly summaries editable and deletable
-- [ ] 4.7 Digest display unchanged (no regression)
+- [x] 4.3 Weekly summaries show with "Weekly" badge
+- [x] 4.4 Weekly-failed entries show warning style
+- [x] 4.5 Weekly-failed entries: no edit button, delete works
+- [x] 4.6 Weekly summaries editable and deletable
+- [x] 4.7 Digest display unchanged (no regression)

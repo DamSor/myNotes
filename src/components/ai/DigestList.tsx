@@ -15,11 +15,12 @@ export default function DigestList({ initialDigests }: DigestListProps) {
       <div className="rounded-2xl border border-white/10 bg-white/10 p-8 text-center backdrop-blur-xl">
         <Sparkles className="mx-auto mb-3 size-8 text-purple-300/60" />
         <p className="text-sm text-blue-100/60">
-          No digests yet. Select a tag on your{" "}
+          No AI content yet. Select a tag on your{" "}
           <a href="/notes" className="text-purple-300 underline hover:text-purple-200">
             notes
           </a>{" "}
-          and click &quot;Generate digest&quot; to get started.
+          and click &quot;Generate digest&quot; to get started. Weekly summaries are generated automatically every
+          Monday.
         </p>
       </div>
     );
