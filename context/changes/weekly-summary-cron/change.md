@@ -1,9 +1,9 @@
 ---
 change_id: weekly-summary-cron
 title: Weekly summary cron
-status: implemented
+status: impl_reviewed
 created: 2026-08-31
-updated: 2026-08-31
+updated: 2026-09-01
 archived_at: null
 ---
 

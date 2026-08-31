@@ -98,12 +98,16 @@ export async function generateWeeklySummaryForUser(
     // eslint-disable-next-line no-console -- intentional: surface LLM failure in server logs before writing fallback entry
     console.error("weekly-summary: LLM call failed for user", userId, e);
 
-    await supabase.from("ai_content").insert({
+    const fallback = await supabase.from("ai_content").insert({
       user_id: userId,
       source_tag_id: null,
       kind: "weekly-failed",
       body: WEEKLY_FAILED_BODY,
     });
+    if (fallback.error) {
+      // eslint-disable-next-line no-console -- intentional: surface fallback-insert failure (lessons.md rule #2)
+      console.error("weekly-summary: failed to insert weekly-failed entry for user", userId, fallback.error.message);
+    }
 
     throw e;
   }
@@ -123,12 +127,16 @@ export async function generateWeeklySummaryForUser(
     // eslint-disable-next-line no-console -- intentional: surface insert failure
     console.error("weekly-summary: insert failed for user", userId, insertResult.error?.message);
 
-    await supabase.from("ai_content").insert({
+    const fallback = await supabase.from("ai_content").insert({
       user_id: userId,
       source_tag_id: null,
       kind: "weekly-failed",
       body: WEEKLY_FAILED_BODY,
     });
+    if (fallback.error) {
+      // eslint-disable-next-line no-console -- intentional: surface fallback-insert failure (lessons.md rule #2)
+      console.error("weekly-summary: failed to insert weekly-failed entry for user", userId, fallback.error.message);
+    }
 
     throw new Error(`Failed to store weekly summary: ${insertResult.error?.message ?? "no row returned"}`);
   }
