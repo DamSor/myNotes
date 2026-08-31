@@ -73,7 +73,7 @@ export interface AiContent {
   id: string;
   user_id: string;
   source_tag_id: string | null;
-  kind: "digest" | "weekly";
+  kind: "digest" | "weekly" | "weekly-failed";
   body: string;
   created_at: string;
   updated_at: string;

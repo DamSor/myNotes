@@ -7,12 +7,12 @@
   //   2. Weekly cron ("0 3 * * 1", Phase 6) fails with "Script exceeded CPU
   //      time limit" in `wrangler tail` / observability MCP.
   //   3. Free-tier log retention (3d vs 7d Paid) hides a Monday incident by
-  //      Wednesday — mitigated by `ai_run_failures` Supabase table (Phase 6).
+  //      Wednesday — mitigated by `kind='weekly-failed'` in `ai_content`.
   //   4. Daily requests exceed Free cap of 100 000/day.
   // Source: context/changes/deployment/deployment-plan.md § Phase 0
   // ============================================================================
   "name": "my-notes",
-  "main": "@astrojs/cloudflare/entrypoints/server",
+  "main": "./src/worker.ts",
   "compatibility_date": "2026-05-08",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
@@ -22,5 +22,8 @@
   },
   "observability": {
     "enabled": true,
+  },
+  "triggers": {
+    "crons": ["0 3 * * 1"],
   },
 }
