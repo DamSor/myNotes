@@ -406,26 +406,26 @@ Update the `/ai` page to display all `ai_content` kinds (digest, weekly, weekly-
 
 #### Automated
 
-- [x] 2.1 Build passes: `npm run build`
-- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Build passes: `npm run build` — 9091775
+- [x] 2.2 Lint passes: `npm run lint` — 9091775
 
 #### Manual
 
-- [x] 2.3 Phase 3 wires for end-to-end verification
+- [x] 2.3 Phase 3 wires for end-to-end verification — 9091775
 
 ### Phase 3: Scheduled Handler Orchestration
 
 #### Automated
 
-- [ ] 3.1 Build passes: `npm run build`
-- [ ] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Build passes: `npm run build`
+- [x] 3.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 Weekly summary generated for eligible user (≥3 notes)
-- [ ] 3.4 No entry for ineligible user (<3 notes)
-- [ ] 3.5 Idempotency: duplicate run skips existing summary
-- [ ] 3.6 Failed generation produces kind='weekly-failed' entry
+- [x] 3.3 Weekly summary generated for eligible user (≥3 notes)
+- [x] 3.4 No entry for ineligible user (<3 notes)
+- [x] 3.5 Idempotency: duplicate run skips existing summary
+- [x] 3.6 Failed generation produces kind='weekly-failed' entry
 
 ### Phase 4: UI Updates
 
