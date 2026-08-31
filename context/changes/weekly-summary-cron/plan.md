@@ -431,13 +431,13 @@ Update the `/ai` page to display all `ai_content` kinds (digest, weekly, weekly-
 
 #### Automated
 
-- [x] 4.1 Build passes: `npm run build`
-- [x] 4.2 Lint passes: `npm run lint`
+- [x] 4.1 Build passes: `npm run build` — 7abd460
+- [x] 4.2 Lint passes: `npm run lint` — 7abd460
 
 #### Manual
 
-- [x] 4.3 Weekly summaries show with "Weekly" badge
-- [x] 4.4 Weekly-failed entries show warning style
-- [x] 4.5 Weekly-failed entries: no edit button, delete works
-- [x] 4.6 Weekly summaries editable and deletable
-- [x] 4.7 Digest display unchanged (no regression)
+- [x] 4.3 Weekly summaries show with "Weekly" badge — 7abd460
+- [x] 4.4 Weekly-failed entries show warning style — 7abd460
+- [x] 4.5 Weekly-failed entries: no edit button, delete works — 7abd460
+- [x] 4.6 Weekly summaries editable and deletable — 7abd460
+- [x] 4.7 Digest display unchanged (no regression) — 7abd460
