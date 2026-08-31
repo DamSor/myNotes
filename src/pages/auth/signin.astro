@@ -48,6 +48,7 @@ const error = oauthUserMessage(Astro.url.searchParams.get("error"));
   </div>
 </Layout>
 
+<!-- Hash-bridge: keep in sync with HASH_ERROR_BRIDGE in src/pages/auth/callback.ts -->
 <script is:inline>
   (function () {
     var params = new URLSearchParams(location.hash.replace(/^#/, ""));

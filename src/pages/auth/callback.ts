@@ -4,7 +4,8 @@ import { createClient } from "@/lib/supabase";
 
 export const prerender = false;
 
-/** Hash fragments never reach the server. Render this so the browser can lift `#error=` into `?error=`. */
+/** Hash fragments never reach the server. Render this so the browser can lift `#error=` into `?error=`.
+ *  Keep in sync with the `is:inline` bridge in src/pages/auth/signin.astro. */
 const HASH_ERROR_BRIDGE = `<!doctype html>
 <html lang="en">
   <head>

@@ -4,6 +4,7 @@ version: 1
 status: draft
 created: 2026-08-18
 updated: 2026-08-30
+
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -37,7 +38,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | S-04 | `single-tag-filter`           | user filtruje listę notatek po pojedynczej etykiecie                                                  | S-01                   | FR-011                      | done |
 | S-05 | `text-search`                 | user wyszukuje notatki po fragmencie tekstu (case-insensitive, substring)                             | S-01                   | FR-020                      | done |
 | S-06 | `edit-or-delete-digest`       | user edytuje digest inline lub usuwa go w sekcji "AI dla mnie" (sygnały 70% akceptacji)               | S-02                   | FR-017                      | done |
-| S-07 | `google-oauth-swap`           | user loguje się przez Google OAuth zamiast przez email+hasło i jawnie się wylogowuje                  | —                      | FR-001, FR-002, FR-003, Access Control | ready    |
+| S-07 | `google-oauth-swap`           | user loguje się przez Google OAuth zamiast przez email+hasło i jawnie się wylogowuje                  | —                      | FR-001, FR-002, FR-003, Access Control | in-progress |
 | S-08 | `weekly-summary-cron`         | user dostaje w niedzielny poranek cotygodniową notatkę AI, gdy w ostatnim tygodniu ma ≥3 notatki      | F-01, F-02, S-01       | US-01, FR-018, FR-019       | proposed |
 
 ## Streams
@@ -179,7 +180,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **Unknowns:**
   - TTL sesji + strategia odświeżania tokenu OAuth — nie zdefiniowane w PRD (OQ#1); dowolna rozsądna domyślna polityka Supabase wystarczy. Owner: developer. Block: no.
 - **Risk:** Baseline auth (email+hasło) już wozi ruch produkcyjny — swap jest destrukcyjny (invalidates istniejące sesje). Sekwencjonowane po north-starze celowo: w tygodniu 1-2 developer używa emaila do dogfoodingu, w tygodniu 3 swap + testy przed launchem. Nie blokuje walidacji hipotezy — dlatego `Status: ready` mimo bycia w połowie kolejki.
-- **Status:** ready
+- **Status:** in-progress
 
 ### S-08: Cotygodniowe podsumowanie AI (US-01)
 
