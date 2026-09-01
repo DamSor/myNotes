@@ -3,7 +3,7 @@ project: MyNotes
 version: 1
 status: draft
 created: 2026-08-18
-updated: 2026-08-31
+updated: 2026-09-01
 
 prd_version: 1
 main_goal: speed
@@ -39,7 +39,7 @@ MyNotes rozwiązuje problem "myśli, do których nikt nie wraca" — aktywnie my
 | S-05 | `text-search`                 | user wyszukuje notatki po fragmencie tekstu (case-insensitive, substring)                             | S-01                   | FR-020                      | done |
 | S-06 | `edit-or-delete-digest`       | user edytuje digest inline lub usuwa go w sekcji "AI dla mnie" (sygnały 70% akceptacji)               | S-02                   | FR-017                      | done |
 | S-07 | `google-oauth-swap`           | user loguje się przez Google OAuth zamiast przez email+hasło i jawnie się wylogowuje                  | —                      | FR-001, FR-002, FR-003, Access Control | done |
-| S-08 | `weekly-summary-cron`         | user dostaje w niedzielny poranek cotygodniową notatkę AI, gdy w ostatnim tygodniu ma ≥3 notatki      | F-01, F-02, S-01       | US-01, FR-018, FR-019       | in-progress |
+| S-08 | `weekly-summary-cron`         | user dostaje w niedzielny poranek cotygodniową notatkę AI, gdy w ostatnim tygodniu ma ≥3 notatki      | F-01, F-02, S-01       | US-01, FR-018, FR-019       | done |
 
 ## Streams
 
@@ -194,7 +194,7 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
   - Kształt architekturalny scheduled handler'a — adapter `workerEntryPoint` z custom Worker entry, czy drugi tiny Worker wołający protected API route sekretem współdzielonym? Infrastructure.md §Getting Started #6 poleca drugi Worker dla MVP. Owner: developer. Block: no.
   - Free-tier CPU cap 10 ms na Worker — czy `JSON.parse` odpowiedzi OpenRouter + iteracja po userach mieści się w budżecie? Pre-mortem infrastructure.md §Pre-Mortem sygnalizuje ryzyko. Owner: developer. Block: no (mitigation: `try/catch` z pisaniem błędu do Supabase; upgrade do Workers Paid $5/mo jako tripwire — udokumentowane w `wrangler.jsonc` już dziś).
 - **Risk:** Ten slice ma najgęściejszy zestaw ryzyk: cron infra, CPU cap, prompt jakości, próg ≥3 notatek, tydzień oczekiwania na pierwszy sygnał. Sekwencjonowane na koniec pod speed — jest must-have, ale nie blokuje pierwszej połowy Primary SC (S-02 to udowadnia). Bez ai_run_failures surface'u (świadomie sparkowany) — cichy fail w środę już zniknie z Free-tier logów (retencja 3 dni); mitygacja: `try/catch` piszący do `ai_content` z `kind='weekly-failed'` LUB dodać `ai_run_failures` w tym slice'ie jeśli speed pozwoli.
-- **Status:** in-progress
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -245,3 +245,4 @@ Co jest już w kodzie na dzień `2026-08-18` (auto-zbadane + potwierdzone przez 
 - **S-02: user w widoku listy filtrowanej po tagu (S-04 sequenced po tym — tu wystarczy prosty tag-selector) klika "Generuj digest" i po ≤ 2 s widocznego postępu (streaming lub spinner) dostaje nowy wpis typu "digest" w dedykowanej sekcji "AI dla mnie", oznaczony tagiem źródłowym, grounded w notatkach tego tagu od ostatniego digestu (lub od początku, jeśli pierwszy raz).** — Archived 2026-08-27 → `context/archive/2026-08-27-first-ai-digest-on-click/`. Lesson: —.
 - **S-06: user edytuje digest inline lub usuwa go w sekcji "AI dla mnie" (sygnały 70% akceptacji)** — Archived 2026-08-30 → `context/archive/2026-08-30-edit-or-delete-digest/`. Lesson: —.
 - **S-07: user loguje się przez Google OAuth zamiast przez email+hasło i jawnie się wylogowuje** — Archived 2026-08-31 → `context/archive/2026-08-30-google-oauth-swap/`. Lesson: —.
+- **S-08: user dostaje w niedzielny poranek cotygodniową notatkę AI, gdy w ostatnim tygodniu ma ≥3 notatki** — Archived 2026-09-01 → `context/archive/2026-08-31-weekly-summary-cron/`. Lesson: —.
