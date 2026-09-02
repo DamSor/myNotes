@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { createMockSupabase } from "./__tests__/helpers";
 
 vi.mock("@/lib/services/llm", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/lib/services/llm")>();
@@ -10,31 +10,8 @@ vi.mock("@/lib/services/llm", async (importOriginal) => {
 });
 
 import { chatCompletion, LlmRequestError } from "@/lib/services/llm";
-import { generateWeeklySummaryForUser } from "@/lib/services/weekly-summary";
+import { generateWeeklySummaryForUser, hasWeeklySummaryInWindow } from "@/lib/services/weekly-summary";
 import type { NoteRow } from "@/lib/services/digest";
-
-function createMockSupabase(results: { data: unknown; error: unknown }[]) {
-  let idx = 0;
-  const next = () => results[idx++] ?? { data: null, error: null };
-
-  const builder: Record<string, ReturnType<typeof vi.fn>> = {};
-  for (const m of ["select", "insert", "update", "eq", "gt", "is", "in", "order", "limit"]) {
-    builder[m] = vi.fn().mockReturnThis();
-  }
-  builder.maybeSingle = vi.fn(() => Promise.resolve(next()));
-  builder.single = vi.fn(() => Promise.resolve(next()));
-
-  Object.defineProperty(builder, "then", {
-    value(onFulfilled: (v: unknown) => unknown, onRejected?: (e: unknown) => unknown) {
-      return Promise.resolve(next()).then(onFulfilled, onRejected);
-    },
-    configurable: true,
-    enumerable: false,
-  });
-
-  const client = { from: vi.fn(() => builder) };
-  return { client: client as unknown as SupabaseClient, builder };
-}
 
 function note(id: string, content: string, createdAt = "2026-09-01T00:00:00Z"): NoteRow {
   return { id, content, created_at: createdAt };
@@ -42,7 +19,7 @@ function note(id: string, content: string, createdAt = "2026-09-01T00:00:00Z"): 
 
 const threeNotes = [note("1", "Note one"), note("2", "Note two"), note("3", "Note three")];
 
-describe("generateWeeklySummaryForUser", () => {
+describe("generateWeeklySummaryForUser — error propagation", () => {
   beforeEach(() => {
     vi.mocked(chatCompletion).mockReset();
     vi.spyOn(console, "error").mockImplementation(() => undefined);
@@ -91,5 +68,50 @@ describe("generateWeeklySummaryForUser", () => {
     expect(builder.insert).toHaveBeenCalledTimes(2);
     const lastInsertArgs = builder.insert.mock.calls[1] as [Record<string, unknown>];
     expect(lastInsertArgs[0]).toMatchObject({ kind: "weekly-failed" });
+  });
+});
+
+describe("data isolation", () => {
+  beforeEach(() => {
+    vi.mocked(chatCompletion).mockReset();
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("hasWeeklySummaryInWindow scopes by user_id", async () => {
+    const { client, builder } = createMockSupabase([{ data: null, error: null }]);
+
+    await hasWeeklySummaryInWindow(client, "user-a", "2026-08-25T00:00:00Z");
+
+    expect(builder.eq).toHaveBeenCalledWith("user_id", "user-a");
+  });
+
+  it("generateWeeklySummaryForUser scopes fetchUserNotesInWindow by user_id", async () => {
+    const weeklyRow = {
+      id: "w1",
+      user_id: "user-a",
+      source_tag_id: null,
+      kind: "weekly",
+      body: "weekly content",
+      created_at: "2026-09-01T00:00:00Z",
+      updated_at: "2026-09-01T00:00:00Z",
+      deleted_at: null,
+    };
+    const { client, builder } = createMockSupabase([
+      { data: threeNotes, error: null },
+      { data: weeklyRow, error: null },
+    ]);
+    vi.mocked(chatCompletion).mockResolvedValue({ text: "weekly content" });
+
+    await generateWeeklySummaryForUser(client, "user-a", "2026-08-25T00:00:00Z", "key");
+
+    const userIdCalls = (builder.eq.mock.calls as unknown[][]).filter(([key]) => key === "user_id");
+    expect(userIdCalls.length).toBeGreaterThanOrEqual(1);
+    for (const [, value] of userIdCalls) {
+      expect(value).toBe("user-a");
+    }
   });
 });

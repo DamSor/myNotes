@@ -372,24 +372,24 @@ Multiple users:
 
 #### Automated
 
-- [x] 2.1 `npm test` passes — all LLM failure matrix tests green
-- [x] 2.2 `npm run lint` passes (production code change)
-- [x] 2.3 Type checking passes
+- [x] 2.1 `npm test` passes — all LLM failure matrix tests green — 291fdfa
+- [x] 2.2 `npm run lint` passes (production code change) — 291fdfa
+- [x] 2.3 Type checking passes — 291fdfa
 
 #### Manual
 
-- [x] 2.4 Empty-string guard placement reviewed
-- [x] 2.5 Test coverage reviewed against failure matrix
+- [x] 2.4 Empty-string guard placement reviewed — 291fdfa
+- [x] 2.5 Test coverage reviewed against failure matrix — 291fdfa
 
 ### Phase 3: Data Isolation + Worker Cron Tests (Risk #2 + Cron Boundary)
 
 #### Automated
 
-- [ ] 3.1 `npm test` passes — all isolation and worker tests green
-- [ ] 3.2 `npm run lint` passes
-- [ ] 3.3 `npm run build` passes
+- [x] 3.1 `npm test` passes — all isolation and worker tests green
+- [x] 3.2 `npm run lint` passes
+- [x] 3.3 `npm run build` passes
 
 #### Manual
 
-- [ ] 3.4 Mock helper reviewed for reusability
-- [ ] 3.5 Worker threshold boundary test verified (2 vs 3)
+- [x] 3.4 Mock helper reviewed for reusability
+- [x] 3.5 Worker threshold boundary test verified (2 vs 3)

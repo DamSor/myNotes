@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { createMockSupabase } from "./__tests__/helpers";
 
 vi.mock("@/lib/services/llm", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/lib/services/llm")>();
@@ -12,29 +12,6 @@ vi.mock("@/lib/services/llm", async (importOriginal) => {
 
 import { chatCompletion, isLlmConfigured, LlmRequestError } from "@/lib/services/llm";
 import { buildUserPrompt, truncateNotes, generateDigest, DigestError, type NoteRow } from "@/lib/services/digest";
-
-function createMockSupabase(results: { data: unknown; error: unknown }[]) {
-  let idx = 0;
-  const next = () => results[idx++] ?? { data: null, error: null };
-
-  const builder: Record<string, ReturnType<typeof vi.fn>> = {};
-  for (const m of ["select", "insert", "update", "eq", "gt", "is", "in", "order", "limit"]) {
-    builder[m] = vi.fn().mockReturnThis();
-  }
-  builder.maybeSingle = vi.fn(() => Promise.resolve(next()));
-  builder.single = vi.fn(() => Promise.resolve(next()));
-
-  Object.defineProperty(builder, "then", {
-    value(onFulfilled: (v: unknown) => unknown, onRejected?: (e: unknown) => unknown) {
-      return Promise.resolve(next()).then(onFulfilled, onRejected);
-    },
-    configurable: true,
-    enumerable: false,
-  });
-
-  const client = { from: vi.fn(() => builder) };
-  return { client: client as unknown as SupabaseClient, builder };
-}
 
 function note(id: string, content: string, createdAt = "2026-09-01T00:00:00Z"): NoteRow {
   return { id, content, created_at: createdAt };
@@ -135,5 +112,43 @@ describe("generateDigest — error propagation", () => {
     const err = await generateDigest(client, "user-a", "tag-1").catch((e: unknown) => e);
     expect(err).toBeInstanceOf(LlmRequestError);
     expect(builder.insert).not.toHaveBeenCalled();
+  });
+});
+
+describe("generateDigest — data isolation", () => {
+  beforeEach(() => {
+    vi.mocked(isLlmConfigured).mockReturnValue(true);
+    vi.mocked(chatCompletion).mockResolvedValue({ text: "digest content" });
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("scopes all queries by the provided user_id", async () => {
+    const digestRow = {
+      id: "d1",
+      user_id: "user-a",
+      source_tag_id: "tag-1",
+      kind: "digest",
+      body: "digest content",
+      created_at: "2026-09-01T00:00:00Z",
+      updated_at: "2026-09-01T00:00:00Z",
+      deleted_at: null,
+    };
+    const { client, builder } = createMockSupabase([
+      { data: null, error: null },
+      { data: [note("n1", "User A note")], error: null },
+      { data: digestRow, error: null },
+    ]);
+
+    await generateDigest(client, "user-a", "tag-1");
+
+    const userIdCalls = (builder.eq.mock.calls as unknown[][]).filter(([key]) => key === "user_id");
+    expect(userIdCalls.length).toBeGreaterThanOrEqual(2);
+    for (const [, value] of userIdCalls) {
+      expect(value).toBe("user-a");
+    }
   });
 });
