@@ -385,11 +385,11 @@ Multiple users:
 
 #### Automated
 
-- [x] 3.1 `npm test` passes — all isolation and worker tests green
-- [x] 3.2 `npm run lint` passes
-- [x] 3.3 `npm run build` passes
+- [x] 3.1 `npm test` passes — all isolation and worker tests green — 889f2a9
+- [x] 3.2 `npm run lint` passes — 889f2a9
+- [x] 3.3 `npm run build` passes — 889f2a9
 
 #### Manual
 
-- [x] 3.4 Mock helper reviewed for reusability
-- [x] 3.5 Worker threshold boundary test verified (2 vs 3)
+- [x] 3.4 Mock helper reviewed for reusability — 889f2a9
+- [x] 3.5 Worker threshold boundary test verified (2 vs 3) — 889f2a9

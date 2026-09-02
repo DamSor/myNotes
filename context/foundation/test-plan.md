@@ -65,7 +65,7 @@ orchestrator updates Status as artifacts appear on disk.
 
 | # | Phase name | Goal (one line) | Risks covered | Test types | Status | Change folder |
 |---|-----------|-----------------|---------------|------------|--------|---------------|
-| 1 | Test runner bootstrap + LLM resilience | Set up Vitest; prove LLM integration survives corrupt responses and data isolation holds at API level. | #1, #2 | unit + integration | change opened | context/changes/testing-llm-resilience-and-isolation/ |
+| 1 | Test runner bootstrap + LLM resilience | Set up Vitest; prove LLM integration survives corrupt responses and data isolation holds at API level. | #1, #2 | unit + integration | done | context/changes/testing-llm-resilience-and-isolation/ |
 | 2 | AI generation flow coverage | Prove digest and weekly summary flows select the right notes, respect time windows/thresholds, and record failures. | #3, #4 | integration (mocked LLM) | not started | — |
 | 3 | Auth and CRUD durability | Prove auth flow doesn't regress and note CRUD persists correctly end-to-end. | #5, #6 | integration | not started | — |
 | 4 | Quality gates wiring | Add `npm test` to CI, update AGENTS.md with test cookbook, lock the floor. | cross-cutting | CI gate + documentation | not started | — |
@@ -106,11 +106,35 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 ### 6.1 Adding a unit test
 
-TBD — see §3 Phase 1 (LLM response parsing, error handling patterns).
+1. Create `<module>.test.ts` **co-located** with the module under test (e.g. `src/lib/services/llm.test.ts`).
+2. `astro:env/server` is mocked globally in `src/test-setup.ts` — no per-file setup needed.
+3. Mock module dependencies with `vi.mock()` + `vi.fn()`. Use `importOriginal` to preserve non-mocked exports:
+   ```ts
+   vi.mock("@/lib/services/llm", async (importOriginal) => {
+     const actual = await importOriginal<typeof import("@/lib/services/llm")>();
+     return { ...actual, chatCompletion: vi.fn() };
+   });
+   ```
+4. Use `vi.hoisted()` when a test needs to mutate a value the mock factory reads (e.g. toggling an API key between tests).
+5. Use `vi.stubGlobal("fetch", vi.fn().mockResolvedValue(...))` for `fetch` mocking — no MSW needed.
+6. Always test both success **and** error paths. For LLM-related code, cover the failure matrix: HTTP errors (429, 500), malformed JSON, missing fields, empty string content, timeout.
 
 ### 6.2 Adding an integration test
 
-TBD — see §3 Phase 1 (data isolation, API roundtrip patterns).
+1. Import `createMockSupabase` from `src/lib/services/__tests__/helpers.ts`. It returns `{ client, builder }`.
+2. Pass an array of `{ data, error }` results in call order — the mock consumes them sequentially (via `.maybeSingle()`, `.single()`, or direct `await`).
+3. **Data isolation**: assert that every `.eq("user_id", ...)` call used the expected user ID:
+   ```ts
+   const userIdCalls = (builder.eq.mock.calls as unknown[][]).filter(([key]) => key === "user_id");
+   for (const [, value] of userIdCalls) expect(value).toBe("user-a");
+   ```
+4. **Worker cron**: call `worker.scheduled()` with a mock `ctx`, then `await` the promise captured by `waitUntil`:
+   ```ts
+   const waitUntilMock = vi.fn();
+   worker.scheduled({}, env, { waitUntil: waitUntilMock, passThroughOnException: vi.fn() });
+   await (waitUntilMock.mock.calls[0]?.[0] as Promise<void> | undefined);
+   ```
+5. When adding a new service, add **both** error propagation tests (does the error surface correctly?) and isolation tests (does every query scope by `user_id`?).
 
 ### 6.3 Adding a test for a new API endpoint
 
@@ -129,6 +153,12 @@ TBD — see §3 Phase 3 (OAuth callback, session resolution, route gating patter
 (After each phase lands, the final sub-phase appends a 2–3 line note
 here capturing anything surprising the rollout taught.)
 
+**Phase 1 (testing-llm-resilience-and-isolation):** The `astro:env/server` virtual module
+must be mocked in a global setup file (`src/test-setup.ts`) — per-file mocking fails because
+Astro's module resolution isn't available outside the build pipeline. Vitest's `@` path alias
+must map to `"@"` (not `"@/"`) in `vitest.config.ts` to avoid "Cannot find package" errors.
+Extracting the mock Supabase helper early prevented drift between test files.
+
 ## 7. What We Deliberately Don't Test
 
 Exclusions agreed during the rollout (Phase 2 interview, Q5). Future
@@ -141,6 +171,7 @@ contributors should respect these unless the underlying assumption changes.
 ## 8. Freshness Ledger
 
 - Strategy (§1–§5) last reviewed: 2026-09-01
+- Cookbook (§6) last updated: 2026-09-03 (Phase 1 shipped)
 - Stack versions last verified: 2026-09-01
 - AI-native tool references last verified: 2026-09-01
 
