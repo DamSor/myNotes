@@ -360,26 +360,26 @@ Multiple users:
 
 #### Automated
 
-- [x] 1.1 `npm test` runs and smoke test passes
-- [x] 1.2 `npm run lint` passes with ESLint test overrides
-- [x] 1.3 CI workflow YAML is valid
+- [x] 1.1 `npm test` runs and smoke test passes — 084b7ac
+- [x] 1.2 `npm run lint` passes with ESLint test overrides — 084b7ac
+- [x] 1.3 CI workflow YAML is valid — 084b7ac
 
 #### Manual
 
-- [ ] 1.4 CI pipeline runs test step on push/PR
+- [x] 1.4 CI pipeline runs test step on push/PR — 084b7ac
 
 ### Phase 2: Empty-String Guard + LLM Resilience Tests (Risk #1)
 
 #### Automated
 
-- [ ] 2.1 `npm test` passes — all LLM failure matrix tests green
-- [ ] 2.2 `npm run lint` passes (production code change)
-- [ ] 2.3 Type checking passes
+- [x] 2.1 `npm test` passes — all LLM failure matrix tests green
+- [x] 2.2 `npm run lint` passes (production code change)
+- [x] 2.3 Type checking passes
 
 #### Manual
 
-- [ ] 2.4 Empty-string guard placement reviewed
-- [ ] 2.5 Test coverage reviewed against failure matrix
+- [x] 2.4 Empty-string guard placement reviewed
+- [x] 2.5 Test coverage reviewed against failure matrix
 
 ### Phase 3: Data Isolation + Worker Cron Tests (Risk #2 + Cron Boundary)
 

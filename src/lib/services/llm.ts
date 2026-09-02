@@ -153,5 +153,11 @@ export async function chatCompletion(messages: LlmMessage[], opts?: LlmCompletio
     throw new LlmRequestError("OpenRouter response missing completion text", res.status);
   }
 
+  if (text.trim().length === 0) {
+    // eslint-disable-next-line no-console -- intentional server-side error log
+    console.error("chatCompletion: OpenRouter returned an empty completion");
+    throw new LlmRequestError("OpenRouter returned an empty completion", res.status);
+  }
+
   return { text, usage: completionUsage(payload) };
 }
