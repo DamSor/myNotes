@@ -68,6 +68,22 @@ const astroConfig = tseslint.config({
   },
 });
 
+const vitestTestConfig = tseslint.config({
+  files: ["**/*.test.ts"],
+  languageOptions: {
+    globals: {
+      describe: true,
+      it: true,
+      expect: true,
+      vi: true,
+      beforeEach: true,
+      afterEach: true,
+      beforeAll: true,
+      afterAll: true,
+    },
+  },
+});
+
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
   baseConfig,
@@ -75,5 +91,6 @@ export default tseslint.config(
   eslintPluginAstro.configs["flat/recommended"],
   ...eslintPluginAstro.configs["flat/jsx-a11y-recommended"],
   astroConfig,
+  vitestTestConfig,
   eslintPluginPrettier,
 );
